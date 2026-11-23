@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary & Collocations Flashcards</title>
+    <title>Vocabulary & Collocations Flashcards (Thai)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter & Noto Sans Thai -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -17,7 +17,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Inter', 'Noto Sans Thai', 'sans-serif'],
                     }
                 }
             }
@@ -65,12 +65,24 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h6"/></svg>
                 </div>
                 <div>
-                    <h1 class="font-bold text-base sm:text-lg leading-tight tracking-tight">Vocab Deck</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">20 Core Terms & Collocations</p>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-bold text-base sm:text-lg leading-tight tracking-tight">Vocab Deck</h1>
+                    </div>
+                    <p id="headerSubtitle" class="text-xs text-slate-500 dark:text-slate-400">20 Core Terms & Collocations</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2">
+                <!-- Language Switcher Pill (EN / TH) -->
+                <div class="flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60" role="group" aria-label="Language Switcher">
+                    <button id="langEnBtn" type="button" class="px-2.5 py-1 rounded-lg text-xs font-bold transition bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm">
+                        EN
+                    </button>
+                    <button id="langThBtn" type="button" class="px-2.5 py-1 rounded-lg text-xs font-bold transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
+                        TH
+                    </button>
+                </div>
+
                 <!-- View All Button -->
                 <button id="toggleListBtn" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -125,10 +137,11 @@
             <div id="cardWrapper" class="w-full h-[310px] sm:h-[350px] perspective-1000 cursor-pointer select-none group">
                 <div id="flashcardInner" class="relative w-full h-full transform-style-3d">
                     
-                    <!-- FRONT FACE: English Definition -->
+                    <!-- FRONT FACE: Thai Definition -->
+                    <!-- FRONT FACE: Definition (EN / TH) -->
                     <div class="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none p-6 sm:p-10 flex flex-col justify-between transition-colors group-hover:border-indigo-300 dark:group-hover:border-indigo-700">
                         <div class="flex items-center justify-between">
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-600 dark:bg-indigo-950/80 dark:text-indigo-400">
+                            <span id="frontBadgeLabel" class="px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-indigo-50 text-indigo-600 dark:bg-indigo-950/80 dark:text-indigo-400">
                                 Definition
                             </span>
                             <span id="cardPosFront" class="text-xs font-medium text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
@@ -137,16 +150,15 @@
                         </div>
 
                         <div class="my-auto text-center px-2">
-                            <p id="cardDefinition" class="text-xl sm:text-2xl md:text-[26px] font-medium text-slate-800 dark:text-slate-100 leading-relaxed">
-                                Loading definition...
+                            <p id="cardDefinition" class="text-xl sm:text-2xl md:text-[26px] font-semibold text-slate-800 dark:text-slate-100 leading-relaxed">
+                                Loading...
                             </p>
                         </div>
 
                         <div class="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800/80">
                             <span id="cardCategoryTag">Collocations</span>
-                            <span class="flex items-center gap-1 font-medium text-indigo-500 dark:text-indigo-400">
+                            <span id="frontFlipHint" class="flex items-center gap-1 font-medium text-indigo-500 dark:text-indigo-400">
                                 Tap or Press Space to check answer
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
                             </span>
                         </div>
                     </div>
@@ -154,7 +166,7 @@
                     <!-- BACK FACE: Vocabulary Word / Term -->
                     <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-600 to-violet-700 dark:from-indigo-900 dark:to-violet-950 text-white rounded-3xl border-2 border-indigo-500/50 shadow-xl shadow-indigo-500/20 p-6 sm:p-10 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/15 text-white backdrop-blur-sm">
+                            <span id="backBadgeLabel" class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/15 text-white backdrop-blur-sm">
                                 Answer
                             </span>
                             
@@ -175,8 +187,8 @@
                         </div>
 
                         <div class="flex items-center justify-between pt-2 border-t border-white/15 text-xs text-indigo-200">
-                            <span>Did you get it right?</span>
-                            <span>Tap card to see definition</span>
+                            <span id="backQuestionHint">Did you get it right?</span>
+                            <span id="backFlipHint">Tap card to see definition</span>
                         </div>
                     </div>
 
@@ -193,10 +205,10 @@
 
                 <div class="space-y-2">
                     <h2 id="summaryTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                        Round 1 Complete!
+                        จบรอบที่ 1 แล้ว!
                     </h2>
                     <p id="summarySubtitle" class="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-                        You got 15 correct and missed 5 words. Let's review the ones you missed!
+                        คุณตอบถูก 15 คำ และผิด 5 คำ มาทบทวนเฉพาะคำที่ตอบผิดกันต่อเลย!
                     </p>
                 </div>
 
@@ -204,11 +216,11 @@
                 <div class="flex items-center justify-center gap-4">
                     <div class="px-5 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60">
                         <div id="summaryCorrectCount" class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
-                        <div class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Correct</div>
+                        <div id="summaryCorrectLabel" class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Correct</div>
                     </div>
                     <div class="px-5 py-3 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/60">
                         <div id="summaryWrongCount" class="text-2xl font-extrabold text-rose-600 dark:text-rose-400">0</div>
-                        <div class="text-xs font-medium text-rose-700 dark:text-rose-300">Incorrect</div>
+                        <div id="summaryWrongLabel" class="text-xs font-medium text-rose-700 dark:text-rose-300">Incorrect</div>
                     </div>
                 </div>
 
@@ -221,7 +233,7 @@
 
                     <button id="restartDeckBtn" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 active:scale-95 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                        <span>Restart Full Deck</span>
+                        <span id="restartDeckBtnText">Restart Full Deck</span>
                     </button>
                 </div>
             </div>
@@ -233,12 +245,12 @@
             <div class="grid grid-cols-2 gap-3">
                 <button id="wrongBtn" class="py-3.5 px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:hover:bg-rose-900/70 border-2 border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 font-bold text-sm sm:text-base transition flex items-center justify-center gap-2 active:scale-95 shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    <span>Incorrect</span>
+                    <span id="wrongBtnLabel">Incorrect</span>
                 </button>
 
                 <button id="correctBtn" class="py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-sm sm:text-base transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Correct</span>
+                    <span id="correctBtnLabel">Correct</span>
                 </button>
             </div>
 
@@ -246,7 +258,7 @@
             <div class="flex items-center justify-between gap-2 pt-1">
                 <button id="prevBtn" class="py-2 px-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1.5 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                    <span>Previous</span>
+                    <span id="prevBtnLabel">Previous</span>
                 </button>
 
                 <button id="flipBtn" class="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition active:scale-95">
@@ -255,13 +267,13 @@
 
                 <button id="shuffleBtn" class="py-2 px-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1.5 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>
-                    <span>Shuffle</span>
+                    <span id="shuffleBtnLabel">Shuffle</span>
                 </button>
             </div>
         </div>
 
         <!-- Keyboard Shortcuts Hint -->
-        <p class="text-center text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
+        <p id="shortcutsHint" class="text-center text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
             Shortcuts: <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">Space</kbd> Flip &bull; 
             <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">1</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&larr;</kbd> Incorrect &bull; 
             <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">2</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&rarr;</kbd> Correct
@@ -272,8 +284,8 @@
     <section id="listView" class="hidden flex-1 w-full max-w-4xl mx-auto px-4 py-6 space-y-6">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-xl font-bold">Complete Vocabulary List (20)</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400">All matched collocations and vocabulary items from your images.</p>
+                <h2 id="listViewTitle" class="text-xl font-bold">Complete Vocabulary List (20)</h2>
+                <p id="listViewSubtitle" class="text-sm text-slate-500 dark:text-slate-400">All matched collocations and vocabulary items.</p>
             </div>
             <button id="backToStudyBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition">
                 Back to Flashcards
@@ -286,7 +298,7 @@
     </section>
 
     <script>
-        // Complete Vocabulary Dataset (20 Items from all 4 screenshots)
+        // Complete Bilingual Vocabulary Dataset (20 Items with EN & TH Definitions)
         const vocabData = [
             // Matched Collocations (Image 4: 210447)
             {
@@ -295,7 +307,8 @@
                 pos: "n. phrase",
                 category: "collocations",
                 categoryLabel: "Matched Collocations",
-                definition: "The gradual and continuous development, advancement, or transformation of technology over time."
+                defEn: "The gradual and continuous development, advancement, or transformation of technology over time.",
+                defTh: "วิวัฒนาการทางเทคโนโลยี; การพัฒนา เปลี่ยนแปลง และก้าวหน้าอย่างต่อเนื่องของเทคโนโลยีตามกาลเวลา"
             },
             {
                 id: 2,
@@ -303,7 +316,8 @@
                 pos: "adj. phrase",
                 category: "collocations",
                 categoryLabel: "Matched Collocations",
-                definition: "Awaited with great excitement, enthusiasm, and keen expectation."
+                defEn: "Awaited with great excitement, enthusiasm, and keen expectation.",
+                defTh: "ที่รอคอยอย่างใจจดใจจ่อ; สิ่งที่ผู้คนเฝ้ารอด้วยความตื่นเต้นและคาดหวังอย่างมาก"
             },
             {
                 id: 3,
@@ -311,7 +325,8 @@
                 pos: "adj. + prep.",
                 category: "collocations",
                 categoryLabel: "Matched Collocations",
-                definition: "Required or expected to justify actions or decisions; being responsible for something."
+                defEn: "Required or expected to justify actions or decisions; being responsible for something.",
+                defTh: "รับผิดชอบต่อ...; ต้องรับผิดชอบและสามารถชี้แจงเหตุผลต่อการกระทำหรือการตัดสินใจของตนได้"
             },
             {
                 id: 4,
@@ -319,7 +334,8 @@
                 pos: "n. phrase",
                 category: "collocations",
                 categoryLabel: "Matched Collocations",
-                definition: "A deep, fundamental, and far-reaching change in direction, structure, or way of thinking."
+                defEn: "A deep, fundamental, and far-reaching change in direction, structure, or way of thinking.",
+                defTh: "การเปลี่ยนแปลงครั้งใหญ่ / อย่างลึกซึ้ง; การเปลี่ยนทิศทาง โครงสร้าง หรือแนวคิดอย่างถึงรากถึงโคน"
             },
             {
                 id: 5,
@@ -327,7 +343,8 @@
                 pos: "v. + prep.",
                 category: "collocations",
                 categoryLabel: "Matched Collocations",
-                definition: "Given official permission, legal power, or formal approval by a person or authority."
+                defEn: "Given official permission, legal power, or formal approval by a person or authority.",
+                defTh: "ได้รับอนุญาต / อนุมัติโดย...; ได้รับสิทธิ์ อำนาจทางกฎหมาย หรือการรับรองอย่างเป็นทางการจากผู้มีอำนาจ"
             },
 
             // Image 1 (210519)
@@ -337,7 +354,8 @@
                 pos: "v.",
                 category: "set1",
                 categoryLabel: "Core Verbs",
-                definition: "To begin, start, or initiate an action, event, or process (often used in formal contexts)."
+                defEn: "To begin, start, or initiate an action, event, or process (often used in formal contexts).",
+                defTh: "เริ่มต้น, เริ่มลงมือทำ (มักใช้ในบริบทที่เป็นทางการ เช่น เริ่มพิธีการ หรือเริ่มโครงการ)"
             },
             {
                 id: 7,
@@ -345,7 +363,8 @@
                 pos: "phrasal v.",
                 category: "set1",
                 categoryLabel: "Core Verbs",
-                definition: "To explain the reason or cause for something, or to form a particular amount or proportion of a whole."
+                defEn: "To explain the reason or cause for something, or to form a particular amount or proportion of a whole.",
+                defTh: "อธิบายสาเหตุของ... หรือ คิดเป็นสัดส่วน/ปริมาณ (เช่น ยอดขายคิดเป็น 40% ของรายได้ทั้งหมด)"
             },
             {
                 id: 8,
@@ -353,7 +372,8 @@
                 pos: "v.",
                 category: "set1",
                 categoryLabel: "Core Verbs",
-                definition: "To start or set in motion an activity, campaign, or enterprise, or to introduce a new product to the public."
+                defEn: "To start or set in motion an activity, campaign, or enterprise, or to introduce a new product to the public.",
+                defTh: "เปิดตัว, เริ่มต้นแคมเปญ, ปล่อยสินค้าใหม่สู่ตลาด หรือเริ่มดำเนินกิจการ"
             },
             {
                 id: 9,
@@ -361,7 +381,8 @@
                 pos: "v.",
                 category: "set1",
                 categoryLabel: "Core Verbs",
-                definition: "To become aware or conscious of something through the senses, or to interpret and regard something in a particular way."
+                defEn: "To become aware or conscious of something through the senses, or to interpret and regard something in a particular way.",
+                defTh: "รับรู้, สังเกตเห็นผ่านประสาทสัมผัส หรือมอง/ตีความสิ่งใดสิ่งหนึ่งในแง่มุมหนึ่ง"
             },
             {
                 id: 10,
@@ -369,7 +390,8 @@
                 pos: "v.",
                 category: "set1",
                 categoryLabel: "Core Verbs",
-                definition: "To make or become unlikely to change, fail, or decline; to reach a steady and balanced state."
+                defEn: "To make or become unlikely to change, fail, or decline; to reach a steady and balanced state.",
+                defTh: "ทำให้มั่นคง, ทำให้ทรงตัว, ทำให้คงที่ ไม่ผันผวนหรือทรุดตัวลงไปอีก"
             },
 
             // Image 2 (210528)
@@ -379,7 +401,8 @@
                 pos: "adv.",
                 category: "set2",
                 categoryLabel: "Business & Scale",
-                definition: "In a way that is brief, clear, and comprehensive, expressing much in very few words."
+                defEn: "In a way that is brief, clear, and comprehensive, expressing much in very few words.",
+                defTh: "อย่างกระชับและได้ใจความ; สั้น ชัดเจน ครอบคลุมเนื้อหาสำคัญโดยใช้คำน้อยที่สุด"
             },
             {
                 id: 12,
@@ -387,7 +410,8 @@
                 pos: "adj.",
                 category: "set2",
                 categoryLabel: "Business & Scale",
-                definition: "Exceptionally large, heavy, solid, or immense in scale, degree, or intensity."
+                defEn: "Exceptionally large, heavy, solid, or immense in scale, degree, or intensity.",
+                defTh: "ใหญ่โตมโหฬาร, มหาศาล, หนักหน่วง หรือมีขนาดและระดับที่ใหญ่มากเป็นพิเศษ"
             },
             {
                 id: 13,
@@ -395,7 +419,8 @@
                 pos: "n.",
                 category: "set2",
                 categoryLabel: "Business & Scale",
-                definition: "The quality or state of being exposed to the possibility of being attacked, harmed, or damaged physically or emotionally."
+                defEn: "The quality or state of being exposed to the possibility of being attacked, harmed, or damaged physically or emotionally.",
+                defTh: "ความเปราะบาง, จุดอ่อน หรือภาวะที่เสี่ยงต่อการถูกโจมตี ได้รับความเสียหาย หรือได้รับผลกระทบได้ง่าย"
             },
             {
                 id: 14,
@@ -403,7 +428,8 @@
                 pos: "n.",
                 category: "set2",
                 categoryLabel: "Business & Scale",
-                definition: "The process of becoming smaller, shrinking, or a period of economic decline and reduced business activity."
+                defEn: "The process of becoming smaller, shrinking, or a period of economic decline and reduced business activity.",
+                defTh: "การหดตัว, การเล็กลง หรือภาวะการชะลอตัวและหดตัวทางเศรษฐกิจ"
             },
             {
                 id: 15,
@@ -411,7 +437,8 @@
                 pos: "n.",
                 category: "set2",
                 categoryLabel: "Business & Scale",
-                definition: "Liability to change rapidly and unpredictably, especially for the worse (common in financial markets)."
+                defEn: "Liability to change rapidly and unpredictably, especially for the worse (common in financial markets).",
+                defTh: "ความผันผวน; แนวโน้มที่จะเปลี่ยนแปลงอย่างรวดเร็วและคาดเดาได้ยาก (นิยมใช้กับตลาดการเงินหรือราคาหุ้น)"
             },
 
             // Image 3 (210605)
@@ -421,7 +448,8 @@
                 pos: "vp.",
                 category: "set3",
                 categoryLabel: "Risk & Action",
-                definition: "To avoid doing or dealing with something because of nervousness, fear, lack of confidence, or dislike."
+                defEn: "To avoid doing or dealing with something because of nervousness, fear, lack of confidence, or dislike.",
+                defTh: "หลีกเลี่ยง, ถอยห่าง หรือไม่กล้าเข้าไปยุ่งเกี่ยวเนื่องจากความกลัว ความประหม่า หรือขาดความมั่นใจ"
             },
             {
                 id: 17,
@@ -429,7 +457,8 @@
                 pos: "v.",
                 category: "set3",
                 categoryLabel: "Risk & Action",
-                definition: "To make something bad, severe, or painful less serious, harmful, or intense."
+                defEn: "To make something bad, severe, or painful less serious, harmful, or intense.",
+                defTh: "บรรเทา, ลดความรุนแรง หรือทำให้ผลกระทบ/ความเสียหายลดน้อยลง"
             },
             {
                 id: 18,
@@ -437,7 +466,8 @@
                 pos: "n.",
                 category: "set3",
                 categoryLabel: "Risk & Action",
-                definition: "A suspension of movement or activity, typically a temporary stop."
+                defEn: "A suspension of movement or activity, typically a temporary stop.",
+                defTh: "การหยุดชะงัก, การระงับการเคลื่อนไหวหรือกิจกรรมไว้ชั่วคราว"
             },
             {
                 id: 19,
@@ -445,7 +475,8 @@
                 pos: "n.",
                 category: "set3",
                 categoryLabel: "Risk & Action",
-                definition: "A disturbance, interruption, or problem that prevents an event, activity, or process from continuing as usual."
+                defEn: "A disturbance, interruption, or problem that prevents an event, activity, or process from continuing as usual.",
+                defTh: "การหยุดชะงัก, การรบกวน หรือความปั่นป่วนที่ทำให้กิจกรรมหรือกระบวนการไม่สามารถดำเนินต่อไปตามปกติได้"
             },
             {
                 id: 20,
@@ -453,13 +484,73 @@
                 pos: "v.",
                 category: "set3",
                 categoryLabel: "Risk & Action",
-                definition: "To increase rapidly in intensity, magnitude, or seriousness; to become or make more severe."
+                defEn: "To increase rapidly in intensity, magnitude, or seriousness; to become or make more severe.",
+                defTh: "ทวีความรุนแรงขึ้น, บานปลาย หรือเพิ่มระดับความเข้มข้นและขนาดอย่างรวดเร็ว"
             }
         ];
 
+        // UI Translations Dictionary
+        const uiStrings = {
+            en: {
+                headerSubtitle: "20 Core Terms & Collocations (English)",
+                allCardsBtn: "All Cards",
+                flashcardsBtn: "Flashcards",
+                frontBadge: "Definition",
+                frontFlipHint: "Tap or Press Space to check answer",
+                backBadge: "Answer",
+                backQuestionHint: "Did you get it right?",
+                backFlipHint: "Tap card to see definition",
+                wrongBtn: "Incorrect",
+                correctBtn: "Correct",
+                prevBtn: "Previous",
+                flipBtn: "Flip Card",
+                shuffleBtn: "Shuffle",
+                restartDeck: "Restart Full Deck",
+                summaryCorrectLabel: "Correct",
+                summaryWrongLabel: "Incorrect",
+                listViewTitle: "Complete Vocabulary List (20)",
+                listViewSubtitle: "All matched collocations and vocabulary items with English definitions.",
+                backToStudyBtn: "Back to Flashcards",
+                masteredTitle: "All Cards Mastered!",
+                masteredSub: (total, round) => `Awesome job! You answered all ${total} cards correctly in Round ${round}.`,
+                roundCompleteTitle: (round) => `Round ${round} Complete!`,
+                roundCompleteSub: (c, w) => `You got ${c} right and missed ${w}. Review the missed cards until you get them all right!`,
+                retryWrongBtn: (w) => `Practice Incorrect Cards (${w})`,
+                shortcutsHtml: `Shortcuts: <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">Space</kbd> Flip &bull; <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">1</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&larr;</kbd> Incorrect &bull; <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">2</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&rarr;</kbd> Correct`
+            },
+            th: {
+                headerSubtitle: "20 Core Terms & Collocations (คำแปลภาษาไทย)",
+                allCardsBtn: "คำศัพท์ทั้งหมด",
+                flashcardsBtn: "แฟลชการ์ด",
+                frontBadge: "ความหมาย (Definition)",
+                frontFlipHint: "แตะการ์ดหรือกด Space เพื่อดูคำศัพท์",
+                backBadge: "คำศัพท์ (Term)",
+                backQuestionHint: "จำคำนี้ได้หรือไม่?",
+                backFlipHint: "แตะการ์ดเพื่อดูความหมาย",
+                wrongBtn: "ตอบผิด (Incorrect)",
+                correctBtn: "ตอบถูก (Correct)",
+                prevBtn: "ก่อนหน้า",
+                flipBtn: "พลิกการ์ด",
+                shuffleBtn: "สลับการ์ด",
+                restartDeck: "เริ่มใหม่ทั้งหมด",
+                summaryCorrectLabel: "ตอบถูก (Correct)",
+                summaryWrongLabel: "ตอบผิด (Incorrect)",
+                listViewTitle: "รายการคำศัพท์ทั้งหมด (20 คำ)",
+                listViewSubtitle: "รวมคำศัพท์และกลุ่มคำ (Collocations) พร้อมความหมายภาษาไทย",
+                backToStudyBtn: "กลับไปหน้าแฟลชการ์ด",
+                masteredTitle: "จำได้ครบทุกคำแล้ว! (All Mastered)",
+                masteredSub: (total, round) => `ยอดเยี่ยมมาก! คุณตอบถูกครบทั้ง ${total} คำในรอบที่ ${round}`,
+                roundCompleteTitle: (round) => `จบรอบที่ ${round} แล้ว!`,
+                roundCompleteSub: (c, w) => `คุณตอบถูก ${c} คำ และตอบผิด ${w} คำ กดปุ่มด้านล่างเพื่อทบทวนเฉพาะข้อที่ผิดจนกว่าจะถูกหมด`,
+                retryWrongBtn: (w) => `ทบทวนข้อที่ตอบผิด (${w})`,
+                shortcutsHtml: `คีย์ลัด: <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">Space</kbd> พลิกการ์ด &bull; <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">1</kbd> หรือ <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&larr;</kbd> ตอบผิด &bull; <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">2</kbd> หรือ <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&rarr;</kbd> ตอบถูก`
+            }
+        };
+
         // App State
+        let currentLang = 'en'; // Default 'en', switchable to 'th' anytime
         let currentFilter = 'all';
-        let roundQueue = [...vocabData]; // Cards remaining to be tested in the current round
+        let roundQueue = [...vocabData];
         let currentIndex = 0;
         let isFlipped = false;
         let roundNumber = 1;
@@ -468,6 +559,25 @@
         let isTransitioning = false;
 
         // DOM Elements
+        const langEnBtn = document.getElementById('langEnBtn');
+        const langThBtn = document.getElementById('langThBtn');
+        const headerSubtitle = document.getElementById('headerSubtitle');
+        const frontBadgeLabel = document.getElementById('frontBadgeLabel');
+        const frontFlipHint = document.getElementById('frontFlipHint');
+        const backBadgeLabel = document.getElementById('backBadgeLabel');
+        const backQuestionHint = document.getElementById('backQuestionHint');
+        const backFlipHint = document.getElementById('backFlipHint');
+        const wrongBtnLabel = document.getElementById('wrongBtnLabel');
+        const correctBtnLabel = document.getElementById('correctBtnLabel');
+        const prevBtnLabel = document.getElementById('prevBtnLabel');
+        const shuffleBtnLabel = document.getElementById('shuffleBtnLabel');
+        const restartDeckBtnText = document.getElementById('restartDeckBtnText');
+        const summaryCorrectLabel = document.getElementById('summaryCorrectLabel');
+        const summaryWrongLabel = document.getElementById('summaryWrongLabel');
+        const shortcutsHint = document.getElementById('shortcutsHint');
+        const listViewTitle = document.getElementById('listViewTitle');
+        const listViewSubtitle = document.getElementById('listViewSubtitle');
+
         const cardWrapper = document.getElementById('cardWrapper');
         const flashcardInner = document.getElementById('flashcardInner');
         const cardDefinition = document.getElementById('cardDefinition');
@@ -519,6 +629,69 @@
             document.documentElement.classList.toggle('dark');
         });
 
+        // Switch Language Function (EN <-> TH) without losing progress
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // Update active pill styling
+            const activeClasses = ['bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-indigo-300', 'shadow-sm'];
+            const inactiveClasses = ['text-slate-500', 'dark:text-slate-400', 'hover:text-slate-800', 'dark:hover:text-slate-200'];
+
+            if (lang === 'en') {
+                langEnBtn.classList.add(...activeClasses);
+                langEnBtn.classList.remove(...inactiveClasses);
+                langThBtn.classList.remove(...activeClasses);
+                langThBtn.classList.add(...inactiveClasses);
+            } else {
+                langThBtn.classList.add(...activeClasses);
+                langThBtn.classList.remove(...inactiveClasses);
+                langEnBtn.classList.remove(...activeClasses);
+                langEnBtn.classList.add(...inactiveClasses);
+            }
+
+            // Update static UI labels
+            const t = uiStrings[lang];
+            headerSubtitle.textContent = t.headerSubtitle;
+            frontBadgeLabel.textContent = t.frontBadge;
+            frontFlipHint.innerHTML = `${t.frontFlipHint} <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
+            backBadgeLabel.textContent = t.backBadge;
+            backQuestionHint.textContent = t.backQuestionHint;
+            backFlipHint.textContent = t.backFlipHint;
+            wrongBtnLabel.textContent = t.wrongBtn;
+            correctBtnLabel.textContent = t.correctBtn;
+            prevBtnLabel.textContent = t.prevBtn;
+            flipBtn.textContent = t.flipBtn;
+            shuffleBtnLabel.textContent = t.shuffleBtn;
+            restartDeckBtnText.textContent = t.restartDeck;
+            summaryCorrectLabel.textContent = t.summaryCorrectLabel;
+            summaryWrongLabel.textContent = t.summaryWrongLabel;
+            shortcutsHint.innerHTML = t.shortcutsHtml;
+            listViewTitle.textContent = t.listViewTitle;
+            listViewSubtitle.textContent = t.listViewSubtitle;
+            backToStudyBtn.textContent = t.backToStudyBtn;
+
+            const isListHidden = listView.classList.contains('hidden');
+            toggleListBtn.querySelector('span').textContent = isListHidden ? t.allCardsBtn : t.flashcardsBtn;
+
+            // Update current card definition without resetting flip state
+            const card = roundQueue[currentIndex];
+            if (card) {
+                cardDefinition.textContent = lang === 'en' ? card.defEn : card.defTh;
+            }
+
+            // Refresh summary or list view if currently visible
+            if (!roundSummaryArea.classList.contains('hidden')) {
+                showRoundSummary();
+            }
+            if (!listView.classList.contains('hidden')) {
+                renderListView();
+            }
+        }
+
+        langEnBtn.addEventListener('click', () => setLanguage('en'));
+        langThBtn.addEventListener('click', () => setLanguage('th'));
+
         // Start a brand-new deck session based on selected category filter
         function startFullDeck(filter) {
             currentFilter = filter;
@@ -557,7 +730,7 @@
             const card = roundQueue[currentIndex];
             if (!card) return;
 
-            cardDefinition.textContent = card.definition;
+            cardDefinition.textContent = currentLang === 'en' ? card.defEn : card.defTh;
             cardPosFront.textContent = `(${card.pos})`;
             cardCategoryTag.textContent = card.categoryLabel;
             cardWord.textContent = card.word;
@@ -590,6 +763,7 @@
             controlsArea.classList.add('hidden');
             roundSummaryArea.classList.remove('hidden');
 
+            const t = uiStrings[currentLang];
             const total = roundQueue.length;
             progressBar.style.width = '100%';
             cardCounter.textContent = `Completed ${total} of ${total}`;
@@ -603,17 +777,17 @@
                 // 100% Mastered!
                 summaryIconWrapper.className = "w-16 h-16 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center";
                 summaryIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
-                summaryTitle.textContent = "All Cards Mastered!";
-                summarySubtitle.textContent = `Awesome job! You answered all ${total} cards correctly in Round ${roundNumber}.`;
+                summaryTitle.textContent = t.masteredTitle;
+                summarySubtitle.textContent = t.masteredSub(total, roundNumber);
                 retryWrongBtn.classList.add('hidden');
             } else {
                 // Still have incorrect cards to loop through
                 summaryIconWrapper.className = "w-16 h-16 mx-auto rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center";
                 summaryIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
-                summaryTitle.textContent = `Round ${roundNumber} Complete!`;
-                summarySubtitle.textContent = `You got ${correctCards.length} right and missed ${incorrectCards.length}. Review the missed cards until you get them all right!`;
+                summaryTitle.textContent = t.roundCompleteTitle(roundNumber);
+                summarySubtitle.textContent = t.roundCompleteSub(correctCards.length, incorrectCards.length);
                 retryWrongBtn.classList.remove('hidden');
-                retryWrongBtnText.textContent = `Review Incorrect Cards (${incorrectCards.length})`;
+                retryWrongBtnText.textContent = t.retryWrongBtn(incorrectCards.length);
             }
         }
 
@@ -638,7 +812,7 @@
             correctCounter.textContent = `Correct: ${correctCards.length}`;
             wrongCounter.textContent = `Incorrect: ${incorrectCards.length}`;
 
-            // Subtle visual slide/fade transition to next card
+            // Subtle visual fade transition to next card
             cardWrapper.classList.add('opacity-60', 'scale-[0.98]', 'transition-all', 'duration-150');
 
             setTimeout(() => {
@@ -705,7 +879,7 @@
                             <span class="text-xs text-slate-400 font-medium">(${item.pos})</span>
                         </div>
                         <h3 class="text-lg font-bold text-slate-900 dark:text-white">${item.word}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">${item.definition}</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">${currentLang === 'en' ? item.defEn : item.defTh}</p>
                     </div>
                 </div>
             `).join('');
@@ -749,23 +923,25 @@
 
         // Toggle Study vs List View
         toggleListBtn.addEventListener('click', () => {
+            const t = uiStrings[currentLang];
             const isListHidden = listView.classList.contains('hidden');
             if (isListHidden) {
                 renderListView();
                 studyView.classList.add('hidden');
                 listView.classList.remove('hidden');
-                toggleListBtn.querySelector('span').textContent = 'Flashcards';
+                toggleListBtn.querySelector('span').textContent = t.flashcardsBtn;
             } else {
                 listView.classList.add('hidden');
                 studyView.classList.remove('hidden');
-                toggleListBtn.querySelector('span').textContent = 'All Cards';
+                toggleListBtn.querySelector('span').textContent = t.allCardsBtn;
             }
         });
 
         backToStudyBtn.addEventListener('click', () => {
+            const t = uiStrings[currentLang];
             listView.classList.add('hidden');
             studyView.classList.remove('hidden');
-            toggleListBtn.querySelector('span').textContent = 'All Cards';
+            toggleListBtn.querySelector('span').textContent = t.allCardsBtn;
         });
 
         // Keyboard Navigation (Space = Flip, 1 / Left = Incorrect, 2 / Right = Correct)
@@ -795,6 +971,7 @@
         });
 
         // Initialize App
+        setLanguage('en');
         startFullDeck('all');
     </script>
 </body>
