@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary & Collocations Flashcards</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom 3D Card Flip Mechanics */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        
+        /* Subtle custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300 selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="w-full border-b border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-20">
+        <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h6"/></svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg leading-tight tracking-tight">Vocab Deck</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">20 Core Terms & Collocations</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- View All Button -->
+                <button id="toggleListBtn" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    <span>All Cards</span>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" aria-label="Toggle Dark Mode" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+                    <svg id="sunIcon" class="w-5 h-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    <svg id="moonIcon" class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Study Area -->
+    <main id="studyView" class="flex-1 w-full max-w-3xl mx-auto px-4 py-6 flex flex-col justify-between gap-6">
+        
+        <!-- Filter & Stats Bar -->
+        <div class="space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <!-- Category Filter Pills -->
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full" id="filterContainer">
+                    <button data-filter="all" class="filter-btn active px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-sm transition">All (20)</button>
+                    <button data-filter="collocations" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Collocations (5)</button>
+                    <button data-filter="set1" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Core Verbs (5)</button>
+                    <button data-filter="set2" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Business & Scale (5)</button>
+                    <button data-filter="set3" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Risk & Action (5)</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar & Counters -->
+            <div class="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col gap-2">
+                <div class="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <span id="roundBadge" class="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-bold">Round 1</span>
+                        <span id="cardCounter">Card 1 of 20</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="correctCounter" class="text-emerald-600 dark:text-emerald-400 font-semibold">Correct: 0</span>
+                        <span id="wrongCounter" class="text-rose-600 dark:text-rose-400 font-semibold">Incorrect: 0</span>
+                    </div>
+                </div>
+                <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-indigo-600 rounded-full transition-all duration-300" style="width: 5%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flashcard Container (3D Flip) -->
+        <div id="activeCardArea" class="w-full flex-1 flex flex-col items-center justify-center min-h-[300px] sm:min-h-[340px]">
+            <div id="cardWrapper" class="w-full h-[310px] sm:h-[350px] perspective-1000 cursor-pointer select-none group">
+                <div id="flashcardInner" class="relative w-full h-full transform-style-3d">
+                    
+                    <!-- FRONT FACE: English Definition -->
+                    <div class="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none p-6 sm:p-10 flex flex-col justify-between transition-colors group-hover:border-indigo-300 dark:group-hover:border-indigo-700">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-600 dark:bg-indigo-950/80 dark:text-indigo-400">
+                                Definition
+                            </span>
+                            <span id="cardPosFront" class="text-xs font-medium text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+                                (n. phrase)
+                            </span>
+                        </div>
+
+                        <div class="my-auto text-center px-2">
+                            <p id="cardDefinition" class="text-xl sm:text-2xl md:text-[26px] font-medium text-slate-800 dark:text-slate-100 leading-relaxed">
+                                Loading definition...
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                            <span id="cardCategoryTag">Collocations</span>
+                            <span class="flex items-center gap-1 font-medium text-indigo-500 dark:text-indigo-400">
+                                Tap or Press Space to check answer
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- BACK FACE: Vocabulary Word / Term -->
+                    <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-600 to-violet-700 dark:from-indigo-900 dark:to-violet-950 text-white rounded-3xl border-2 border-indigo-500/50 shadow-xl shadow-indigo-500/20 p-6 sm:p-10 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/15 text-white backdrop-blur-sm">
+                                Answer
+                            </span>
+                            
+                            <!-- Audio Pronunciation Button -->
+                            <button id="speakBtn" type="button" title="Listen to pronunciation" class="p-2.5 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 text-white transition flex items-center gap-1.5 text-xs font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                                <span>Listen</span>
+                            </button>
+                        </div>
+
+                        <div class="my-auto text-center space-y-2">
+                            <h2 id="cardWord" class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                                Word
+                            </h2>
+                            <p id="cardPosBack" class="text-sm sm:text-base font-medium text-indigo-200">
+                                (part of speech)
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2 border-t border-white/15 text-xs text-indigo-200">
+                            <span>Did you get it right?</span>
+                            <span>Tap card to see definition</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Round Summary Screen (Shown when a round finishes) -->
+        <div id="roundSummaryArea" class="hidden w-full flex-1 flex flex-col items-center justify-center min-h-[320px]">
+            <div class="w-full bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 shadow-xl p-6 sm:p-10 text-center space-y-6">
+                <div id="summaryIconWrapper" class="w-16 h-16 mx-auto rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                </div>
+
+                <div class="space-y-2">
+                    <h2 id="summaryTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                        Round 1 Complete!
+                    </h2>
+                    <p id="summarySubtitle" class="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                        You got 15 correct and missed 5 words. Let's review the ones you missed!
+                    </p>
+                </div>
+
+                <!-- Score Pills -->
+                <div class="flex items-center justify-center gap-4">
+                    <div class="px-5 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60">
+                        <div id="summaryCorrectCount" class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
+                        <div class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Correct</div>
+                    </div>
+                    <div class="px-5 py-3 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/60">
+                        <div id="summaryWrongCount" class="text-2xl font-extrabold text-rose-600 dark:text-rose-400">0</div>
+                        <div class="text-xs font-medium text-rose-700 dark:text-rose-300">Incorrect</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <button id="retryWrongBtn" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-bold text-sm shadow-lg shadow-rose-500/25 transition flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        <span id="retryWrongBtnText">Practice Incorrect Cards (5)</span>
+                    </button>
+
+                    <button id="restartDeckBtn" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 active:scale-95 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        <span>Restart Full Deck</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Grading & Utility Controls -->
+        <div id="controlsArea" class="space-y-3">
+            <!-- Primary Grading Buttons (Incorrect / Correct) -->
+            <div class="grid grid-cols-2 gap-3">
+                <button id="wrongBtn" class="py-3.5 px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:hover:bg-rose-900/70 border-2 border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 font-bold text-sm sm:text-base transition flex items-center justify-center gap-2 active:scale-95 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <span>Incorrect</span>
+                </button>
+
+                <button id="correctBtn" class="py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-sm sm:text-base transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Correct</span>
+                </button>
+            </div>
+
+            <!-- Secondary Utility Row -->
+            <div class="flex items-center justify-between gap-2 pt-1">
+                <button id="prevBtn" class="py-2 px-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1.5 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    <span>Previous</span>
+                </button>
+
+                <button id="flipBtn" class="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition active:scale-95">
+                    Flip Card
+                </button>
+
+                <button id="shuffleBtn" class="py-2 px-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1.5 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>
+                    <span>Shuffle</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Keyboard Shortcuts Hint -->
+        <p class="text-center text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
+            Shortcuts: <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">Space</kbd> Flip &bull; 
+            <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">1</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&larr;</kbd> Incorrect &bull; 
+            <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">2</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&rarr;</kbd> Correct
+        </p>
+    </main>
+
+    <!-- All Cards Reference View (Hidden by default) -->
+    <section id="listView" class="hidden flex-1 w-full max-w-4xl mx-auto px-4 py-6 space-y-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-bold">Complete Vocabulary List (20)</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">All matched collocations and vocabulary items from your images.</p>
+            </div>
+            <button id="backToStudyBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition">
+                Back to Flashcards
+            </button>
+        </div>
+
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Populated via JS -->
+        </div>
+    </section>
+
+    <script>
+        // Complete Vocabulary Dataset (20 Items from all 4 screenshots)
+        const vocabData = [
+            // Matched Collocations (Image 4: 210447)
+            {
+                id: 1,
+                word: "technological evolution",
+                pos: "n. phrase",
+                category: "collocations",
+                categoryLabel: "Matched Collocations",
+                definition: "The gradual and continuous development, advancement, or transformation of technology over time."
+            },
+            {
+                id: 2,
+                word: "eagerly anticipated",
+                pos: "adj. phrase",
+                category: "collocations",
+                categoryLabel: "Matched Collocations",
+                definition: "Awaited with great excitement, enthusiasm, and keen expectation."
+            },
+            {
+                id: 3,
+                word: "accountable for",
+                pos: "adj. + prep.",
+                category: "collocations",
+                categoryLabel: "Matched Collocations",
+                definition: "Required or expected to justify actions or decisions; being responsible for something."
+            },
+            {
+                id: 4,
+                word: "profound shift",
+                pos: "n. phrase",
+                category: "collocations",
+                categoryLabel: "Matched Collocations",
+                definition: "A deep, fundamental, and far-reaching change in direction, structure, or way of thinking."
+            },
+            {
+                id: 5,
+                word: "authorized by",
+                pos: "v. + prep.",
+                category: "collocations",
+                categoryLabel: "Matched Collocations",
+                definition: "Given official permission, legal power, or formal approval by a person or authority."
+            },
+
+            // Image 1 (210519)
+            {
+                id: 6,
+                word: "commence",
+                pos: "v.",
+                category: "set1",
+                categoryLabel: "Core Verbs",
+                definition: "To begin, start, or initiate an action, event, or process (often used in formal contexts)."
+            },
+            {
+                id: 7,
+                word: "account for",
+                pos: "phrasal v.",
+                category: "set1",
+                categoryLabel: "Core Verbs",
+                definition: "To explain the reason or cause for something, or to form a particular amount or proportion of a whole."
+            },
+            {
+                id: 8,
+                word: "launch",
+                pos: "v.",
+                category: "set1",
+                categoryLabel: "Core Verbs",
+                definition: "To start or set in motion an activity, campaign, or enterprise, or to introduce a new product to the public."
+            },
+            {
+                id: 9,
+                word: "perceive",
+                pos: "v.",
+                category: "set1",
+                categoryLabel: "Core Verbs",
+                definition: "To become aware or conscious of something through the senses, or to interpret and regard something in a particular way."
+            },
+            {
+                id: 10,
+                word: "stabilize",
+                pos: "v.",
+                category: "set1",
+                categoryLabel: "Core Verbs",
+                definition: "To make or become unlikely to change, fail, or decline; to reach a steady and balanced state."
+            },
+
+            // Image 2 (210528)
+            {
+                id: 11,
+                word: "concisely",
+                pos: "adv.",
+                category: "set2",
+                categoryLabel: "Business & Scale",
+                definition: "In a way that is brief, clear, and comprehensive, expressing much in very few words."
+            },
+            {
+                id: 12,
+                word: "massive",
+                pos: "adj.",
+                category: "set2",
+                categoryLabel: "Business & Scale",
+                definition: "Exceptionally large, heavy, solid, or immense in scale, degree, or intensity."
+            },
+            {
+                id: 13,
+                word: "vulnerability",
+                pos: "n.",
+                category: "set2",
+                categoryLabel: "Business & Scale",
+                definition: "The quality or state of being exposed to the possibility of being attacked, harmed, or damaged physically or emotionally."
+            },
+            {
+                id: 14,
+                word: "contraction",
+                pos: "n.",
+                category: "set2",
+                categoryLabel: "Business & Scale",
+                definition: "The process of becoming smaller, shrinking, or a period of economic decline and reduced business activity."
+            },
+            {
+                id: 15,
+                word: "volatility",
+                pos: "n.",
+                category: "set2",
+                categoryLabel: "Business & Scale",
+                definition: "Liability to change rapidly and unpredictably, especially for the worse (common in financial markets)."
+            },
+
+            // Image 3 (210605)
+            {
+                id: 16,
+                word: "shy away from",
+                pos: "vp.",
+                category: "set3",
+                categoryLabel: "Risk & Action",
+                definition: "To avoid doing or dealing with something because of nervousness, fear, lack of confidence, or dislike."
+            },
+            {
+                id: 17,
+                word: "mitigate",
+                pos: "v.",
+                category: "set3",
+                categoryLabel: "Risk & Action",
+                definition: "To make something bad, severe, or painful less serious, harmful, or intense."
+            },
+            {
+                id: 18,
+                word: "halt",
+                pos: "n.",
+                category: "set3",
+                categoryLabel: "Risk & Action",
+                definition: "A suspension of movement or activity, typically a temporary stop."
+            },
+            {
+                id: 19,
+                word: "disruption",
+                pos: "n.",
+                category: "set3",
+                categoryLabel: "Risk & Action",
+                definition: "A disturbance, interruption, or problem that prevents an event, activity, or process from continuing as usual."
+            },
+            {
+                id: 20,
+                word: "escalate",
+                pos: "v.",
+                category: "set3",
+                categoryLabel: "Risk & Action",
+                definition: "To increase rapidly in intensity, magnitude, or seriousness; to become or make more severe."
+            }
+        ];
+
+        // App State
+        let currentFilter = 'all';
+        let roundQueue = [...vocabData]; // Cards remaining to be tested in the current round
+        let currentIndex = 0;
+        let isFlipped = false;
+        let roundNumber = 1;
+        let correctCards = [];
+        let incorrectCards = [];
+        let isTransitioning = false;
+
+        // DOM Elements
+        const cardWrapper = document.getElementById('cardWrapper');
+        const flashcardInner = document.getElementById('flashcardInner');
+        const cardDefinition = document.getElementById('cardDefinition');
+        const cardPosFront = document.getElementById('cardPosFront');
+        const cardCategoryTag = document.getElementById('cardCategoryTag');
+        const cardWord = document.getElementById('cardWord');
+        const cardPosBack = document.getElementById('cardPosBack');
+        
+        const roundBadge = document.getElementById('roundBadge');
+        const cardCounter = document.getElementById('cardCounter');
+        const correctCounter = document.getElementById('correctCounter');
+        const wrongCounter = document.getElementById('wrongCounter');
+        const progressBar = document.getElementById('progressBar');
+
+        const activeCardArea = document.getElementById('activeCardArea');
+        const roundSummaryArea = document.getElementById('roundSummaryArea');
+        const controlsArea = document.getElementById('controlsArea');
+
+        const summaryIconWrapper = document.getElementById('summaryIconWrapper');
+        const summaryTitle = document.getElementById('summaryTitle');
+        const summarySubtitle = document.getElementById('summarySubtitle');
+        const summaryCorrectCount = document.getElementById('summaryCorrectCount');
+        const summaryWrongCount = document.getElementById('summaryWrongCount');
+        const retryWrongBtn = document.getElementById('retryWrongBtn');
+        const retryWrongBtnText = document.getElementById('retryWrongBtnText');
+        const restartDeckBtn = document.getElementById('restartDeckBtn');
+
+        const prevBtn = document.getElementById('prevBtn');
+        const flipBtn = document.getElementById('flipBtn');
+        const wrongBtn = document.getElementById('wrongBtn');
+        const correctBtn = document.getElementById('correctBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const speakBtn = document.getElementById('speakBtn');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        const studyView = document.getElementById('studyView');
+        const listView = document.getElementById('listView');
+        const toggleListBtn = document.getElementById('toggleListBtn');
+        const backToStudyBtn = document.getElementById('backToStudyBtn');
+        const cardsGrid = document.getElementById('cardsGrid');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Initialize Theme
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Start a brand-new deck session based on selected category filter
+        function startFullDeck(filter) {
+            currentFilter = filter;
+            const baseCards = filter === 'all' 
+                ? [...vocabData] 
+                : vocabData.filter(item => item.category === filter);
+            
+            roundNumber = 1;
+            startRound(baseCards);
+        }
+
+        // Start a specific round with a given list of cards
+        function startRound(cardsForRound) {
+            roundQueue = [...cardsForRound];
+            currentIndex = 0;
+            correctCards = [];
+            incorrectCards = [];
+            isFlipped = false;
+            isTransitioning = false;
+
+            // Show active flashcard UI, hide summary screen
+            activeCardArea.classList.remove('hidden');
+            controlsArea.classList.remove('hidden');
+            roundSummaryArea.classList.add('hidden');
+
+            renderCard();
+        }
+
+        // Render Current Card & Stats
+        function renderCard() {
+            // Reset flip state instantly without 3D reverse-flip animation so the next card's back isn't exposed
+            flashcardInner.style.transition = 'none';
+            isFlipped = false;
+            flashcardInner.classList.remove('rotate-y-180');
+
+            const card = roundQueue[currentIndex];
+            if (!card) return;
+
+            cardDefinition.textContent = card.definition;
+            cardPosFront.textContent = `(${card.pos})`;
+            cardCategoryTag.textContent = card.categoryLabel;
+            cardWord.textContent = card.word;
+            cardPosBack.textContent = `(${card.pos})`;
+
+            // Force browser reflow before re-enabling flip transition
+            void flashcardInner.offsetWidth;
+            flashcardInner.style.transition = '';
+
+            // Update Progress & Counters
+            const total = roundQueue.length;
+            roundBadge.textContent = `Round ${roundNumber}`;
+            cardCounter.textContent = `Card ${currentIndex + 1} of ${total}`;
+            correctCounter.textContent = `Correct: ${correctCards.length}`;
+            wrongCounter.textContent = `Incorrect: ${incorrectCards.length}`;
+
+            const completedCount = correctCards.length + incorrectCards.length;
+            const progressPercent = Math.round((completedCount / total) * 100);
+            progressBar.style.width = `${progressPercent}%`;
+
+            // Disable Previous button on first card
+            prevBtn.disabled = currentIndex === 0;
+            prevBtn.classList.toggle('opacity-40', currentIndex === 0);
+            prevBtn.classList.toggle('pointer-events-none', currentIndex === 0);
+        }
+
+        // Show Round Summary Screen
+        function showRoundSummary() {
+            activeCardArea.classList.add('hidden');
+            controlsArea.classList.add('hidden');
+            roundSummaryArea.classList.remove('hidden');
+
+            const total = roundQueue.length;
+            progressBar.style.width = '100%';
+            cardCounter.textContent = `Completed ${total} of ${total}`;
+            correctCounter.textContent = `Correct: ${correctCards.length}`;
+            wrongCounter.textContent = `Incorrect: ${incorrectCards.length}`;
+
+            summaryCorrectCount.textContent = correctCards.length;
+            summaryWrongCount.textContent = incorrectCards.length;
+
+            if (incorrectCards.length === 0) {
+                // 100% Mastered!
+                summaryIconWrapper.className = "w-16 h-16 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center";
+                summaryIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+                summaryTitle.textContent = "All Cards Mastered!";
+                summarySubtitle.textContent = `Awesome job! You answered all ${total} cards correctly in Round ${roundNumber}.`;
+                retryWrongBtn.classList.add('hidden');
+            } else {
+                // Still have incorrect cards to loop through
+                summaryIconWrapper.className = "w-16 h-16 mx-auto rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center";
+                summaryIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
+                summaryTitle.textContent = `Round ${roundNumber} Complete!`;
+                summarySubtitle.textContent = `You got ${correctCards.length} right and missed ${incorrectCards.length}. Review the missed cards until you get them all right!`;
+                retryWrongBtn.classList.remove('hidden');
+                retryWrongBtnText.textContent = `Review Incorrect Cards (${incorrectCards.length})`;
+            }
+        }
+
+        // Grade Current Card & Auto-Advance to Next Card
+        function gradeCurrentCard(isCorrect) {
+            if (isTransitioning || roundSummaryArea.classList.contains('hidden') === false) return;
+            isTransitioning = true;
+
+            const currentCard = roundQueue[currentIndex];
+
+            // Ensure card isn't duplicated if user went back with Previous button
+            correctCards = correctCards.filter(c => c.id !== currentCard.id);
+            incorrectCards = incorrectCards.filter(c => c.id !== currentCard.id);
+
+            if (isCorrect) {
+                correctCards.push(currentCard);
+            } else {
+                incorrectCards.push(currentCard);
+            }
+
+            // Update live counters immediately
+            correctCounter.textContent = `Correct: ${correctCards.length}`;
+            wrongCounter.textContent = `Incorrect: ${incorrectCards.length}`;
+
+            // Subtle visual slide/fade transition to next card
+            cardWrapper.classList.add('opacity-60', 'scale-[0.98]', 'transition-all', 'duration-150');
+
+            setTimeout(() => {
+                cardWrapper.classList.remove('opacity-60', 'scale-[0.98]');
+                
+                if (currentIndex + 1 < roundQueue.length) {
+                    currentIndex++;
+                    renderCard();
+                } else {
+                    showRoundSummary();
+                }
+                isTransitioning = false;
+            }, 180);
+        }
+
+        // Go Back to Previous Card (allows re-answering)
+        function goToPreviousCard() {
+            if (currentIndex > 0 && !isTransitioning) {
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        // Flip Card Action
+        function flipCard() {
+            isFlipped = !isFlipped;
+            flashcardInner.classList.toggle('rotate-y-180', isFlipped);
+        }
+
+        // Text-to-Speech Pronunciation
+        function speakCurrentWord(e) {
+            if (e) e.stopPropagation();
+            const card = roundQueue[currentIndex];
+            if (!card || !('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(card.word);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.92;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Shuffle Remaining Unanswered Cards in Current Round
+        function shuffleRemainingCards() {
+            const answered = roundQueue.slice(0, currentIndex);
+            const remaining = roundQueue.slice(currentIndex);
+            for (let i = remaining.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+            }
+            roundQueue = [...answered, ...remaining];
+            renderCard();
+        }
+
+        // Render Complete List View
+        function renderListView() {
+            cardsGrid.innerHTML = vocabData.map((item, idx) => `
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between gap-3">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                                #${idx + 1} &bull; ${item.categoryLabel}
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium">(${item.pos})</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">${item.word}</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">${item.definition}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Event Listeners
+        cardWrapper.addEventListener('click', flipCard);
+        flipBtn.addEventListener('click', flipCard);
+        wrongBtn.addEventListener('click', () => gradeCurrentCard(false));
+        correctBtn.addEventListener('click', () => gradeCurrentCard(true));
+        prevBtn.addEventListener('click', goToPreviousCard);
+        shuffleBtn.addEventListener('click', shuffleRemainingCards);
+        speakBtn.addEventListener('click', speakCurrentWord);
+
+        // Retry Incorrect Cards Button (Loops continuously until 0 incorrect)
+        retryWrongBtn.addEventListener('click', () => {
+            if (incorrectCards.length > 0) {
+                roundNumber++;
+                startRound(incorrectCards);
+            }
+        });
+
+        // Restart Full Deck Button
+        restartDeckBtn.addEventListener('click', () => {
+            startFullDeck(currentFilter);
+        });
+
+        // Filter Buttons
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm');
+                    b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+                });
+                btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm');
+                btn.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
+                
+                startFullDeck(btn.dataset.filter);
+            });
+        });
+
+        // Toggle Study vs List View
+        toggleListBtn.addEventListener('click', () => {
+            const isListHidden = listView.classList.contains('hidden');
+            if (isListHidden) {
+                renderListView();
+                studyView.classList.add('hidden');
+                listView.classList.remove('hidden');
+                toggleListBtn.querySelector('span').textContent = 'Flashcards';
+            } else {
+                listView.classList.add('hidden');
+                studyView.classList.remove('hidden');
+                toggleListBtn.querySelector('span').textContent = 'All Cards';
+            }
+        });
+
+        backToStudyBtn.addEventListener('click', () => {
+            listView.classList.add('hidden');
+            studyView.classList.remove('hidden');
+            toggleListBtn.querySelector('span').textContent = 'All Cards';
+        });
+
+        // Keyboard Navigation (Space = Flip, 1 / Left = Incorrect, 2 / Right = Correct)
+        document.addEventListener('keydown', (e) => {
+            if (!listView.classList.contains('hidden')) return;
+            if (!roundSummaryArea.classList.contains('hidden')) {
+                if (e.code === 'Enter' || e.code === 'Space') {
+                    e.preventDefault();
+                    if (incorrectCards.length > 0) {
+                        roundNumber++;
+                        startRound(incorrectCards);
+                    } else {
+                        startFullDeck(currentFilter);
+                    }
+                }
+                return;
+            }
+
+            if (e.code === 'Space') {
+                e.preventDefault();
+                flipCard();
+            } else if (e.code === 'ArrowLeft' || e.key === '1') {
+                gradeCurrentCard(false);
+            } else if (e.code === 'ArrowRight' || e.key === '2') {
+                gradeCurrentCard(true);
+            }
+        });
+
+        // Initialize App
+        startFullDeck('all');
+    </script>
+</body>
+</html>
