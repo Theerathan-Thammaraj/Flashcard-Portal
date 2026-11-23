@@ -99,18 +99,25 @@
     </header>
 
     <!-- Main Study Area -->
-    <main id="studyView" class="flex-1 w-full max-w-3xl mx-auto px-4 py-6 flex flex-col justify-between gap-6">
+    <main id="studyView" class="flex-1 w-full max-w-3xl mx-auto px-4 py-5 flex flex-col justify-between gap-5">
         
-        <!-- Filter & Stats Bar -->
-        <div class="space-y-4">
+        <!-- Deck Switcher + Filter & Stats Bar -->
+        <div class="space-y-3.5">
+            <!-- Top Deck Selector Tabs -->
+            <div class="grid grid-cols-2 p-1 rounded-2xl bg-slate-200/70 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <button id="deckCoreBtn" type="button" class="py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    <span id="deckCoreLabel">Core Vocab (20)</span>
+                </button>
+                <button id="deckGraphBtn" type="button" class="py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    <span id="deckGraphLabel">Graph Writing (31)</span>
+                </button>
+            </div>
+
             <div class="flex flex-wrap items-center justify-between gap-2">
-                <!-- Category Filter Pills -->
+                <!-- Category Filter Pills (Dynamically populated per deck) -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full" id="filterContainer">
-                    <button data-filter="all" class="filter-btn active px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-sm transition">All (20)</button>
-                    <button data-filter="collocations" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Collocations (5)</button>
-                    <button data-filter="set1" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Core Verbs (5)</button>
-                    <button data-filter="set2" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Business & Scale (5)</button>
-                    <button data-filter="set3" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Risk & Action (5)</button>
                 </div>
             </div>
 
@@ -133,25 +140,35 @@
         </div>
 
         <!-- Flashcard Container (3D Flip) -->
-        <div id="activeCardArea" class="w-full flex-1 flex flex-col items-center justify-center min-h-[300px] sm:min-h-[340px]">
-            <div id="cardWrapper" class="w-full h-[310px] sm:h-[350px] perspective-1000 cursor-pointer select-none group">
+        <div id="activeCardArea" class="w-full flex-1 flex flex-col items-center justify-center min-h-[320px] sm:min-h-[360px]">
+            <div id="cardWrapper" class="w-full h-[335px] sm:h-[375px] perspective-1000 cursor-pointer select-none group">
                 <div id="flashcardInner" class="relative w-full h-full transform-style-3d">
                     
-                    <!-- FRONT FACE: Thai Definition -->
-                    <!-- FRONT FACE: Definition (EN / TH) -->
-                    <div class="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none p-6 sm:p-10 flex flex-col justify-between transition-colors group-hover:border-indigo-300 dark:group-hover:border-indigo-700">
-                        <div class="flex items-center justify-between">
+                    <!-- FRONT FACE: Definition OR Graph + Part of Speech -->
+                    <div class="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none p-5 sm:p-8 flex flex-col justify-between transition-colors group-hover:border-indigo-300 dark:group-hover:border-indigo-700">
+                        <div class="flex items-center justify-between gap-2">
                             <span id="frontBadgeLabel" class="px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-indigo-50 text-indigo-600 dark:bg-indigo-950/80 dark:text-indigo-400">
                                 Definition
                             </span>
-                            <span id="cardPosFront" class="text-xs font-medium text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+                            <span id="cardPosFront" class="text-xs sm:text-sm font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50/80 dark:bg-indigo-950/90 border border-indigo-200/80 dark:border-indigo-800/80 px-3 py-1 rounded-xl">
                                 (n. phrase)
                             </span>
                         </div>
 
-                        <div class="my-auto text-center px-2">
+                        <!-- Text Definition Container (Core Deck) -->
+                        <div id="frontTextContainer" class="my-auto text-center px-2">
                             <p id="cardDefinition" class="text-xl sm:text-2xl md:text-[26px] font-semibold text-slate-800 dark:text-slate-100 leading-relaxed">
                                 Loading...
+                            </p>
+                        </div>
+
+                        <!-- Graph SVG Container (Graph Deck) -->
+                        <div id="frontGraphContainer" class="hidden my-auto flex flex-col items-center justify-center gap-2.5 w-full">
+                            <div id="cardGraphSvg" class="w-full max-w-[270px] sm:max-w-[310px] h-[155px] sm:h-[175px] flex items-center justify-center bg-slate-50/90 dark:bg-slate-800/60 rounded-2xl border border-slate-200/70 dark:border-slate-700/70 p-2.5">
+                                <!-- SVG injected via JS -->
+                            </div>
+                            <p id="cardGraphCue" class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 text-center">
+                                Upward Trend
                             </p>
                         </div>
 
@@ -164,7 +181,7 @@
                     </div>
 
                     <!-- BACK FACE: Vocabulary Word / Term -->
-                    <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-600 to-violet-700 dark:from-indigo-900 dark:to-violet-950 text-white rounded-3xl border-2 border-indigo-500/50 shadow-xl shadow-indigo-500/20 p-6 sm:p-10 flex flex-col justify-between">
+                    <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-600 to-violet-700 dark:from-indigo-900 dark:to-violet-950 text-white rounded-3xl border-2 border-indigo-500/50 shadow-xl shadow-indigo-500/20 p-5 sm:p-8 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span id="backBadgeLabel" class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/15 text-white backdrop-blur-sm">
                                 Answer
@@ -177,12 +194,14 @@
                             </button>
                         </div>
 
-                        <div class="my-auto text-center space-y-2">
-                            <h2 id="cardWord" class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                        <div class="my-auto text-center space-y-2 px-1 overflow-y-auto max-h-[210px]">
+                            <h2 id="cardWord" class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-sm leading-snug whitespace-pre-line">
                                 Word
                             </h2>
-                            <p id="cardPosBack" class="text-sm sm:text-base font-medium text-indigo-200">
+                            <p id="cardPosBack" class="text-xs sm:text-sm font-semibold text-indigo-200">
                                 (part of speech)
+                            </p>
+                            <p id="cardNoteBack" class="hidden text-xs sm:text-sm text-amber-200/95 bg-black/20 rounded-xl px-3 py-2 mt-2 max-w-md mx-auto leading-relaxed">
                             </p>
                         </div>
 
@@ -298,8 +317,10 @@
     </section>
 
     <script>
-        // Complete Bilingual Vocabulary Dataset (20 Items with EN & TH Definitions)
-        const vocabData = [
+        // ==========================================
+        // DECK 1: Core Vocabulary Dataset (20 Items)
+        // ==========================================
+        const coreVocabData = [
             // Matched Collocations (Image 4: 210447)
             {
                 id: 1,
@@ -489,17 +510,534 @@
             }
         ];
 
+        // ==========================================
+        // SVG Generators for Graph Writing Flashcards
+        // ==========================================
+        const graphSVGs = {
+            upward: `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="25" y1="110" x2="215" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="25" y1="15" x2="25" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <path d="M 45 95 L 185 30" stroke="#10b981" stroke-width="7" stroke-linecap="round"/>
+                <polyline points="158,27 187,29 175,55" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`,
+            downward: `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="25" y1="110" x2="215" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="25" y1="15" x2="25" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <path d="M 45 30 L 185 95" stroke="#f43f5e" stroke-width="7" stroke-linecap="round"/>
+                <polyline points="158,98 187,96 175,70" fill="none" stroke="#f43f5e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`,
+            peak: `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="25" y1="110" x2="215" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="25" y1="15" x2="25" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <path d="M 35 100 Q 85 90 120 26 Q 155 90 205 100" fill="none" stroke="#3b82f6" stroke-width="4.5" stroke-linecap="round"/>
+                <line x1="120" y1="75" x2="120" y2="34" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="3 2"/>
+                <circle cx="120" cy="26" r="6" fill="#ef4444"/>
+            </svg>`,
+            fluctuate: `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="25" y1="110" x2="215" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="25" y1="15" x2="25" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <path d="M 35 75 C 45 25, 65 25, 75 70 C 85 105, 105 105, 115 60 C 125 20, 145 20, 155 68 C 165 102, 185 95, 200 45" fill="none" stroke="#6366f1" stroke-width="4.5" stroke-linecap="round"/>
+            </svg>`,
+            stable: `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="25" y1="110" x2="215" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="25" y1="15" x2="25" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="40" y1="62" x2="195" y2="62" stroke="#0ea5e9" stroke-width="7" stroke-linecap="round"/>
+                <polyline points="175,48 197,62 175,76" fill="none" stroke="#0ea5e9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`,
+            plateau: `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="25" y1="110" x2="215" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <line x1="25" y1="15" x2="25" y2="110" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                <path d="M 35 102 Q 70 35 125 35 L 205 35" fill="none" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/>
+                <line x1="125" y1="26" x2="205" y2="26" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="4 3"/>
+            </svg>`,
+            // Speed of change (3 lines from origin, highlighting index 0=rapid, 1=gradual, 2=slow)
+            speed: (idx) => `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="30" y1="112" x2="215" y2="112" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+                <line x1="30" y1="15" x2="30" y2="112" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+                <line x1="30" y1="112" x2="105" y2="22" stroke="${idx===0?'#ef4444':'#94a3b8'}" stroke-width="${idx===0?6:2.5}" stroke-opacity="${idx===0?1:0.35}" stroke-linecap="round"/>
+                <line x1="30" y1="112" x2="180" y2="68" stroke="${idx===1?'#f59e0b':'#94a3b8'}" stroke-width="${idx===1?6:2.5}" stroke-opacity="${idx===1?1:0.35}" stroke-linecap="round"/>
+                <line x1="30" y1="112" x2="205" y2="100" stroke="${idx===2?'#10b981':'#94a3b8'}" stroke-width="${idx===2?6:2.5}" stroke-opacity="${idx===2?1:0.35}" stroke-linecap="round"/>
+                <text x="195" y="22" font-size="10" font-weight="bold" fill="currentColor" opacity="0.55">SPEED</text>
+            </svg>`,
+            // Degree of change (5 lines from origin, highlighting index 0=dramatic, 1=vast/huge, 2=substantial, 3=moderate, 4=slight)
+            degree: (idx) => `<svg viewBox="0 0 240 130" class="w-full h-full">
+                <line x1="30" y1="112" x2="215" y2="112" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+                <line x1="30" y1="15" x2="30" y2="112" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+                <line x1="30" y1="112" x2="72" y2="20" stroke="${idx===0?'#ef4444':'#94a3b8'}" stroke-width="${idx===0?5.5:2}" stroke-opacity="${idx===0?1:0.3}" stroke-linecap="round"/>
+                <line x1="30" y1="112" x2="110" y2="30" stroke="${idx===1?'#f97316':'#94a3b8'}" stroke-width="${idx===1?5.5:2}" stroke-opacity="${idx===1?1:0.3}" stroke-linecap="round"/>
+                <line x1="30" y1="112" x2="152" y2="54" stroke="${idx===2?'#eab308':'#94a3b8'}" stroke-width="${idx===2?5.5:2}" stroke-opacity="${idx===2?1:0.3}" stroke-linecap="round"/>
+                <line x1="30" y1="112" x2="185" y2="80" stroke="${idx===3?'#10b981':'#94a3b8'}" stroke-width="${idx===3?5.5:2}" stroke-opacity="${idx===3?1:0.3}" stroke-linecap="round"/>
+                <line x1="30" y1="112" x2="205" y2="101" stroke="${idx===4?'#3b82f6':'#94a3b8'}" stroke-width="${idx===4?5.5:2}" stroke-opacity="${idx===4?1:0.3}" stroke-linecap="round"/>
+                <text x="182" y="22" font-size="10" font-weight="bold" fill="currentColor" opacity="0.55">DEGREE</text>
+            </svg>`,
+            // Full curve with 5 highlighted action segments (0=gradual rise, 1=sharp rise/rocket, 2=sharp fall/plummet, 3=levelled off, 4=slight fall)
+            curve: (seg) => {
+                const segPaths = [
+                    "M 25 105 Q 60 100 85 88",
+                    "M 85 88 Q 102 65 112 28",
+                    "M 126 28 Q 136 52 146 66",
+                    "M 146 66 L 182 66",
+                    "M 182 66 L 215 84"
+                ];
+                const dots = [
+                    [58, 97],
+                    [101, 56],
+                    [137, 48],
+                    [164, 66],
+                    [199, 75]
+                ];
+                return `<svg viewBox="0 0 240 130" class="w-full h-full">
+                    <line x1="20" y1="112" x2="220" y2="112" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                    <line x1="20" y1="15" x2="20" y2="112" stroke="currentColor" stroke-opacity="0.25" stroke-width="2"/>
+                    <path d="M 25 105 Q 60 100 85 88 Q 102 65 112 28 Q 119 18 126 28 Q 136 52 146 66 L 182 66 L 215 84" fill="none" stroke="#94a3b8" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"/>
+                    <path d="${segPaths[seg]}" fill="none" stroke="#ef4444" stroke-width="6.5" stroke-linecap="round"/>
+                    <circle cx="${dots[seg][0]}" cy="${dots[seg][1]}" r="5.5" fill="#ef4444"/>
+                </svg>`;
+            }
+        };
+
+        // ==========================================
+        // DECK 2: Graph Writing Vocabulary (31 Items)
+        // ==========================================
+        const graphVocabData = [
+            // 1. Upward Trend (Nouns, Verbs, Phrases)
+            {
+                id: 101,
+                word: "a rise / an increase\na surge / a growth",
+                speakText: "a rise, an increase, a surge, a growth",
+                pos: "Nouns",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.upward,
+                cueEn: "Upward Trend (↗)",
+                cueTh: "แนวโน้มขาขึ้น (คำนาม)",
+                noteEn: "Used as nouns to describe upward movement in charts.",
+                noteTh: "คำนามสำหรับบรรยายกราฟที่มีแนวโน้มเพิ่มสูงขึ้น"
+            },
+            {
+                id: 102,
+                word: "to rise / to increase\nto surge / to grow",
+                speakText: "to rise, to increase, to surge, to grow",
+                pos: "Verbs",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.upward,
+                cueEn: "Upward Trend (↗)",
+                cueTh: "แนวโน้มขาขึ้น (คำกริยา)",
+                noteEn: "Action verbs showing an upward movement.",
+                noteTh: "คำกริยาแสดงการเพิ่มขึ้นหรือพุ่งสูงขึ้น"
+            },
+            {
+                id: 103,
+                word: "to show an upward trend",
+                speakText: "to show an upward trend",
+                pos: "Phrase",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.upward,
+                cueEn: "Upward Trend (↗)",
+                cueTh: "แนวโน้มขาขึ้น (วลี)",
+                noteEn: "Useful overview phrase for describing overall growth.",
+                noteTh: "วลีสำหรับสรุปภาพรวมว่ากราฟมีทิศทางขาขึ้น"
+            },
+
+            // 2. Downward Trend (Nouns, Verbs, Phrases)
+            {
+                id: 104,
+                word: "a fall / a drop\na decline / a dip",
+                speakText: "a fall, a drop, a decline, a dip",
+                pos: "Nouns",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.downward,
+                cueEn: "Downward Trend (↘)",
+                cueTh: "แนวโน้มขาลง (คำนาม)",
+                noteEn: "Nouns describing a decrease or downward movement.",
+                noteTh: "คำนามสำหรับบรรยายการลดลงหรือดิ่งลง"
+            },
+            {
+                id: 105,
+                word: "to fall / to drop\nto decline / to dip",
+                speakText: "to fall, to drop, to decline, to dip",
+                pos: "Verbs",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.downward,
+                cueEn: "Downward Trend (↘)",
+                cueTh: "แนวโน้มขาลง (คำกริยา)",
+                noteEn: "Verbs describing a decrease in numbers or value.",
+                noteTh: "คำกริยาแสดงการลดลงของตัวเลขหรือปริมาณ"
+            },
+            {
+                id: 106,
+                word: "to show a downward trend\nto hit the lowest point\nto hit a trough",
+                speakText: "to show a downward trend, to hit the lowest point, to hit a trough",
+                pos: "Phrases",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.downward,
+                cueEn: "Downward Trend / Bottom (↘)",
+                cueTh: "แนวโน้มขาลง / จุดต่ำสุด (วลี)",
+                noteEn: "'To hit a trough' means to reach the lowest point in a cycle.",
+                noteTh: "วลีบรรยายแนวโน้มขาลง และจุดต่ำสุดของกราฟ (trough = จุดต่ำสุด)"
+            },
+
+            // 3. Peak (Noun, Verb, Phrase)
+            {
+                id: 107,
+                word: "a peak",
+                speakText: "a peak",
+                pos: "Noun",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.peak,
+                cueEn: "Highest Point / Peak",
+                cueTh: "จุดสูงสุดของกราฟ (คำนาม)",
+                noteEn: "The highest point reached on a graph.",
+                noteTh: "จุดสูงสุดที่กราฟขึ้นไปถึง"
+            },
+            {
+                id: 108,
+                word: "to peak",
+                speakText: "to peak",
+                pos: "Verb",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.peak,
+                cueEn: "Highest Point / Peak",
+                cueTh: "ขึ้นไปแตะจุดสูงสุด (คำกริยา)",
+                noteEn: "Example: Sales peaked at $5 million in June.",
+                noteTh: "เช่น ยอดขายขึ้นไปแตะจุดสูงสุดที่ 5 ล้านดอลลาร์ในเดือนมิถุนายน"
+            },
+            {
+                id: 109,
+                word: "to reach a peak",
+                speakText: "to reach a peak",
+                pos: "Phrase",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.peak,
+                cueEn: "Highest Point / Peak",
+                cueTh: "ขึ้นสู่จุดสูงสุด (วลี)",
+                noteEn: "Verb + noun collocation for reaching the highest level.",
+                noteTh: "วลีที่ใช้บ่อยเมื่อต้องการบอกว่ากราฟขึ้นไปถึงจุดสูงสุด"
+            },
+
+            // 4. Fluctuation (Nouns, Verbs, Phrase)
+            {
+                id: 110,
+                word: "a fluctuation\na variation",
+                speakText: "a fluctuation, a variation",
+                pos: "Nouns",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.fluctuate,
+                cueEn: "Up & Down Movement (〰)",
+                cueTh: "ความผันผวน ขึ้นๆ ลงๆ (คำนาม)",
+                noteEn: "Irregular rising and falling in number or amount.",
+                noteTh: "การเปลี่ยนแปลงขึ้นๆ ลงๆ อย่างไม่สม่ำเสมอ"
+            },
+            {
+                id: 111,
+                word: "to fluctuate\nto vary",
+                speakText: "to fluctuate, to vary",
+                pos: "Verbs",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.fluctuate,
+                cueEn: "Up & Down Movement (〰)",
+                cueTh: "ผันผวน แปรผัน (คำกริยา)",
+                noteEn: "To rise and fall irregularly over a period of time.",
+                noteTh: "คำกริยาแสดงอาการขึ้นๆ ลงๆ ตลอดช่วงเวลา"
+            },
+            {
+                id: 112,
+                word: "to show some fluctuation\nto show some variation",
+                speakText: "to show some fluctuation, to show some variation",
+                pos: "Phrases",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.fluctuate,
+                cueEn: "Up & Down Movement (〰)",
+                cueTh: "แสดงความผันผวน (วลี)",
+                noteEn: "Used to describe unstable patterns in data.",
+                noteTh: "วลีสำหรับบรรยายช่วงที่ข้อมูลมีความผันผวนไม่คงที่"
+            },
+
+            // 5. Stability (Noun, Verb, Phrases)
+            {
+                id: 113,
+                word: "a period of stability",
+                speakText: "a period of stability",
+                pos: "Noun Phrase",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.stable,
+                cueEn: "Flat / No Change (→)",
+                cueTh: "ช่วงเวลาที่คงที่ (คำนาม)",
+                noteEn: "A timeframe where figures stay steady without major change.",
+                noteTh: "ช่วงเวลาที่ตัวเลขคงที่ ไม่มีการเปลี่ยนแปลง"
+            },
+            {
+                id: 114,
+                word: "to stabilize",
+                speakText: "to stabilize",
+                pos: "Verb",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.stable,
+                cueEn: "Flat / Steady (→)",
+                cueTh: "เริ่มคงที่ / ทรงตัว (คำกริยา)",
+                noteEn: "To become steady and stop changing.",
+                noteTh: "เข้าสู่ภาวะคงที่และหยุดการเปลี่ยนแปลง"
+            },
+            {
+                id: 115,
+                word: "to remain stable / constant\nto remain unchanged",
+                speakText: "to remain stable, to remain constant, to remain unchanged",
+                pos: "Phrases",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.stable,
+                cueEn: "Flat / No Change (→)",
+                cueTh: "ยังคงที่ / ไม่เปลี่ยนแปลง (วลี)",
+                noteEn: "Note: 'To remain unchanged' is used when there is no change in that period.",
+                noteTh: "หมายเหตุ: 'To remain unchanged' ใช้เมื่อไม่มีการเปลี่ยนแปลงเลยในช่วงเวลานั้น"
+            },
+
+            // 6. Plateau / Level off (Noun, Verb, Phrases)
+            {
+                id: 116,
+                word: "a plateau",
+                speakText: "a plateau",
+                pos: "Noun",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.plateau,
+                cueEn: "Stable after Rise (📈→)",
+                cueTh: "ภาวะคงที่หลังจากเพิ่มขึ้น (คำนาม)",
+                noteEn: "A state of little or no change following a period of growth.",
+                noteTh: "จุดที่กราฟนิ่งและคงที่หลังจากช่วงที่เพิ่มขึ้น"
+            },
+            {
+                id: 117,
+                word: "to plateau",
+                speakText: "to plateau",
+                pos: "Verb",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.plateau,
+                cueEn: "Stable after Rise (📈→)",
+                cueTh: "คงที่หลังจากพุ่งสูงขึ้น (คำกริยา)",
+                noteEn: "Note: Means to reach a level of stability, especially after a period of increase.",
+                noteTh: "หมายเหตุ: หมายถึงการเข้าสู่ระดับที่คงที่ โดยเฉพาะหลังจากช่วงที่กราฟเพิ่มสูงขึ้น"
+            },
+            {
+                id: 118,
+                word: "to reach a plateau\nto level off / to flatten out",
+                speakText: "to reach a plateau, to level off, to flatten out",
+                pos: "Phrases",
+                category: "trends",
+                categoryLabel: "Chart Trends",
+                svg: graphSVGs.plateau,
+                cueEn: "Level off after Change (📈→)",
+                cueTh: "เริ่มทรงตัว / แบนราบ (วลี)",
+                noteEn: "Note: 'To level off' means to remain unchanged after a period of sharp increase or decrease.",
+                noteTh: "หมายเหตุ: 'To level off' หมายถึงคงที่หลังจากช่วงที่เพิ่มขึ้นหรือลดลงอย่างรวดเร็ว"
+            },
+
+            // 7. Speed of Change (3 Cards)
+            {
+                id: 119,
+                word: "rapid(ly) / quick(ly)\nswift(ly)",
+                speakText: "rapid, rapidly, quick, quickly, swift, swiftly",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.speed(0),
+                cueEn: "Speed of Change: Fast / Steep",
+                cueTh: "ความเร็วของการเปลี่ยนแปลง: รวดเร็ว (เส้นชันมาก)",
+                noteEn: "Describes fast-paced change over a short period.",
+                noteTh: "ใช้อธิบายการเปลี่ยนแปลงที่เกิดขึ้นอย่างรวดเร็วในเวลาสั้นๆ"
+            },
+            {
+                id: 120,
+                word: "gradual(ly)",
+                speakText: "gradual, gradually",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.speed(1),
+                cueEn: "Speed of Change: Steady / Moderate",
+                cueTh: "ความเร็วของการเปลี่ยนแปลง: ค่อยเป็นค่อยไป",
+                noteEn: "Describes change happening step by step over time.",
+                noteTh: "ใช้อธิบายการเปลี่ยนแปลงที่ค่อยๆ เกิดขึ้นทีละน้อยตามลำดับ"
+            },
+            {
+                id: 121,
+                word: "slow(ly)",
+                speakText: "slow, slowly",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.speed(2),
+                cueEn: "Speed of Change: Slow / Gentle",
+                cueTh: "ความเร็วของการเปลี่ยนแปลง: ช้า (เส้นลาดเอียงน้อย)",
+                noteEn: "Describes change taking a long time to happen.",
+                noteTh: "ใช้อธิบายการเปลี่ยนแปลงที่เกิดขึ้นอย่างช้าๆ"
+            },
+
+            // 8. Degree of Change (5 Cards)
+            {
+                id: 122,
+                word: "dramatic / dramatically\nsharp(ly)",
+                speakText: "dramatic, dramatically, sharp, sharply",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.degree(0),
+                cueEn: "Degree of Change: Extreme (Level 5/5)",
+                cueTh: "ระดับการเปลี่ยนแปลง: อย่างมากและฉับพลัน (ระดับสูงสุด)",
+                noteEn: "Used for the steepest, most sudden, and largest changes.",
+                noteTh: "ใช้กับกราฟที่เปลี่ยนระดับมากที่สุดและชันที่สุด"
+            },
+            {
+                id: 123,
+                word: "vast(ly) / huge(ly)\nenormous(ly)",
+                speakText: "vast, vastly, huge, hugely, enormous, enormously",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.degree(1),
+                cueEn: "Degree of Change: Very Large (Level 4/5)",
+                cueTh: "ระดับการเปลี่ยนแปลง: มหาศาล / ใหญ่โต (ระดับ 4/5)",
+                noteEn: "Used for very large amounts or huge shifts in data.",
+                noteTh: "ใช้กับปริมาณหรือสัดส่วนที่เปลี่ยนแปลงไปอย่างมหาศาล"
+            },
+            {
+                id: 124,
+                word: "substantial(ly)\nconsiderable / considerably\nsignificant(ly)",
+                speakText: "substantial, substantially, considerable, considerably, significant, significantly",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.degree(2),
+                cueEn: "Degree of Change: Noticeable / Large (Level 3/5)",
+                cueTh: "ระดับการเปลี่ยนแปลง: อย่างมีนัยสำคัญ / ค่อนข้างมาก (ระดับ 3/5)",
+                noteEn: "High-scoring academic words for notable, important changes.",
+                noteTh: "คำศัพท์ทางการที่นิยมใช้บรรยายการเปลี่ยนแปลงที่มีนัยสำคัญ"
+            },
+            {
+                id: 125,
+                word: "moderate(ly)",
+                speakText: "moderate, moderately",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.degree(3),
+                cueEn: "Degree of Change: Medium (Level 2/5)",
+                cueTh: "ระดับการเปลี่ยนแปลง: ปานกลาง (ระดับ 2/5)",
+                noteEn: "Neither very large nor very small; medium degree.",
+                noteTh: "เปลี่ยนแปลงในระดับปานกลาง ไม่มากและไม่น้อยเกินไป"
+            },
+            {
+                id: 126,
+                word: "slight(ly)\na little",
+                speakText: "slight, slightly, a little",
+                pos: "adj. / adv.",
+                category: "speed_degree",
+                categoryLabel: "Speed & Degree",
+                svg: graphSVGs.degree(4),
+                cueEn: "Degree of Change: Small (Level 1/5)",
+                cueTh: "ระดับการเปลี่ยนแปลง: เล็กน้อย (ระดับ 1/5)",
+                noteEn: "Used when figures change by only a small amount.",
+                noteTh: "ใช้เมื่อตัวเลขมีการเปลี่ยนแปลงเพียงเล็กน้อยเท่านั้น"
+            },
+
+            // 9. Curve Action Combinations (5 Cards from Diagram 202333)
+            {
+                id: 127,
+                word: "increased / rose / climbed\n+ gradually / slowly / minimally",
+                speakText: "increased gradually, rose slowly, climbed minimally",
+                pos: "v. + adv.",
+                category: "curve_actions",
+                categoryLabel: "Curve Actions",
+                svg: graphSVGs.curve(0),
+                cueEn: "Curve Segment: Gentle Rise",
+                cueTh: "ช่วงกราฟ: ค่อยๆ ปรับตัวสูงขึ้นอย่างช้าๆ",
+                noteEn: "Combine an upward verb with a slow/small adverb.",
+                noteTh: "จับคู่กริยาขาขึ้นกับคำวิเศษณ์ที่บอกความช้าหรือเล็กน้อย"
+            },
+            {
+                id: 128,
+                word: "leapt / soared / shot up / rocketed\n(or rose sharply / rapidly / dramatically)",
+                speakText: "leapt, soared, shot up, rocketed, rose sharply, rapidly, dramatically",
+                pos: "v. / v. + adv.",
+                category: "curve_actions",
+                categoryLabel: "Curve Actions",
+                svg: graphSVGs.curve(1),
+                cueEn: "Curve Segment: Steep Surge",
+                cueTh: "ช่วงกราฟ: พุ่งทะยานขึ้นอย่างรวดเร็วและรุนแรง",
+                noteEn: "Strong verbs like 'soared' or 'rocketed' already include 'sharply' in their meaning.",
+                noteTh: "กริยาอย่าง soared / rocketed มีความหมายว่าพุ่งแรงในตัวแล้ว ไม่ต้องเติม sharply ซ้ำ"
+            },
+            {
+                id: 129,
+                word: "slumped / plummeted\n(or dropped / fell / declined sharply / rapidly / dramatically)",
+                speakText: "slumped, plummeted, dropped sharply, fell rapidly, declined dramatically",
+                pos: "v. / v. + adv.",
+                category: "curve_actions",
+                categoryLabel: "Curve Actions",
+                svg: graphSVGs.curve(2),
+                cueEn: "Curve Segment: Steep Drop",
+                cueTh: "ช่วงกราฟ: ดิ่งลงอย่างรวดเร็วและรุนแรง",
+                noteEn: "'Plummeted' and 'slumped' describe a sudden, steep fall.",
+                noteTh: "คำว่า plummeted และ slumped ใช้บรรยายการร่วงลงอย่างหนักและรวดเร็ว"
+            },
+            {
+                id: 130,
+                word: "stabilised\nlevelled off\nremained constant",
+                speakText: "stabilised, levelled off, remained constant",
+                pos: "v. / v. phrase",
+                category: "curve_actions",
+                categoryLabel: "Curve Actions",
+                svg: graphSVGs.curve(3),
+                cueEn: "Curve Segment: Flat Plateau after Drop",
+                cueTh: "ช่วงกราฟ: เริ่มทรงตัวและคงที่หลังจากดิ่งลง",
+                noteEn: "Used when a sharp movement stops and flattens out.",
+                noteTh: "ใช้เมื่อกราฟหยุดการเปลี่ยนแปลงและเริ่มแบนราบคงที่"
+            },
+            {
+                id: 131,
+                word: "dropped / fell / declined\n+ slightly / gradually / minimally / slowly",
+                speakText: "dropped slightly, fell gradually, declined minimally, declined slowly",
+                pos: "v. + adv.",
+                category: "curve_actions",
+                categoryLabel: "Curve Actions",
+                svg: graphSVGs.curve(4),
+                cueEn: "Curve Segment: Gentle Decline",
+                cueTh: "ช่วงกราฟ: ค่อยๆ ลดลงเล็กน้อยอย่างช้าๆ",
+                noteEn: "Combine a downward verb with a gentle/small adverb.",
+                noteTh: "จับคู่กริยาขาลงกับคำวิเศษณ์ที่บอกความเล็กน้อยหรือช้าๆ"
+            }
+        ];
+
         // UI Translations Dictionary
         const uiStrings = {
             en: {
-                headerSubtitle: "20 Core Terms & Collocations (English)",
+                deckCoreLabel: "Core Vocab (20)",
+                deckGraphLabel: "Graph Writing (31)",
+                headerSubtitleCore: "20 Core Terms & Collocations (English)",
+                headerSubtitleGraph: "31 Chart & Trend Expressions (Graph Vocab)",
                 allCardsBtn: "All Cards",
                 flashcardsBtn: "Flashcards",
-                frontBadge: "Definition",
+                frontBadgeCore: "Definition",
+                frontBadgeGraph: "Chart / Trend",
                 frontFlipHint: "Tap or Press Space to check answer",
                 backBadge: "Answer",
                 backQuestionHint: "Did you get it right?",
-                backFlipHint: "Tap card to see definition",
+                backFlipHintCore: "Tap card to see definition",
+                backFlipHintGraph: "Tap card to see chart",
                 wrongBtn: "Incorrect",
                 correctBtn: "Correct",
                 prevBtn: "Previous",
@@ -508,8 +1046,10 @@
                 restartDeck: "Restart Full Deck",
                 summaryCorrectLabel: "Correct",
                 summaryWrongLabel: "Incorrect",
-                listViewTitle: "Complete Vocabulary List (20)",
-                listViewSubtitle: "All matched collocations and vocabulary items with English definitions.",
+                listViewTitleCore: "Complete Vocabulary List (20)",
+                listViewSubtitleCore: "All matched collocations and vocabulary items with English definitions.",
+                listViewTitleGraph: "Graph Writing Vocabulary List (31)",
+                listViewSubtitleGraph: "All chart trends, speeds, degrees, and curve action expressions.",
                 backToStudyBtn: "Back to Flashcards",
                 masteredTitle: "All Cards Mastered!",
                 masteredSub: (total, round) => `Awesome job! You answered all ${total} cards correctly in Round ${round}.`,
@@ -519,14 +1059,19 @@
                 shortcutsHtml: `Shortcuts: <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">Space</kbd> Flip &bull; <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">1</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&larr;</kbd> Incorrect &bull; <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">2</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-200/70 dark:bg-slate-800 rounded text-[11px] font-mono">&rarr;</kbd> Correct`
             },
             th: {
-                headerSubtitle: "20 Core Terms & Collocations (คำแปลภาษาไทย)",
+                deckCoreLabel: "คำศัพท์ทั่วไป (20)",
+                deckGraphLabel: "ศัพท์เขียนกราฟ (31)",
+                headerSubtitleCore: "20 Core Terms & Collocations (คำแปลภาษาไทย)",
+                headerSubtitleGraph: "31 คำศัพท์บรรยายกราฟและแนวโน้ม (Graph Writing)",
                 allCardsBtn: "คำศัพท์ทั้งหมด",
                 flashcardsBtn: "แฟลชการ์ด",
-                frontBadge: "ความหมาย (Definition)",
+                frontBadgeCore: "ความหมาย (Definition)",
+                frontBadgeGraph: "ลักษณะกราฟ (Chart)",
                 frontFlipHint: "แตะการ์ดหรือกด Space เพื่อดูคำศัพท์",
                 backBadge: "คำศัพท์ (Term)",
                 backQuestionHint: "จำคำนี้ได้หรือไม่?",
-                backFlipHint: "แตะการ์ดเพื่อดูความหมาย",
+                backFlipHintCore: "แตะการ์ดเพื่อดูความหมาย",
+                backFlipHintGraph: "แตะการ์ดเพื่อดูกราฟ",
                 wrongBtn: "ตอบผิด (Incorrect)",
                 correctBtn: "ตอบถูก (Correct)",
                 prevBtn: "ก่อนหน้า",
@@ -535,8 +1080,10 @@
                 restartDeck: "เริ่มใหม่ทั้งหมด",
                 summaryCorrectLabel: "ตอบถูก (Correct)",
                 summaryWrongLabel: "ตอบผิด (Incorrect)",
-                listViewTitle: "รายการคำศัพท์ทั้งหมด (20 คำ)",
-                listViewSubtitle: "รวมคำศัพท์และกลุ่มคำ (Collocations) พร้อมความหมายภาษาไทย",
+                listViewTitleCore: "รายการคำศัพท์ทั้งหมด (20 คำ)",
+                listViewSubtitleCore: "รวมคำศัพท์และกลุ่มคำ (Collocations) พร้อมความหมายภาษาไทย",
+                listViewTitleGraph: "รายการคำศัพท์เขียนกราฟทั้งหมด (31 ชุด)",
+                listViewSubtitleGraph: "รวมคำศัพท์บอกแนวโน้ม ความเร็ว ระดับการเปลี่ยนแปลง และช่วงของเส้นกราฟ",
                 backToStudyBtn: "กลับไปหน้าแฟลชการ์ด",
                 masteredTitle: "จำได้ครบทุกคำแล้ว! (All Mastered)",
                 masteredSub: (total, round) => `ยอดเยี่ยมมาก! คุณตอบถูกครบทั้ง ${total} คำในรอบที่ ${round}`,
@@ -547,10 +1094,28 @@
             }
         };
 
+        // Category Filters per Deck
+        const deckFilters = {
+            core: [
+                { id: 'all', label: 'All (20)' },
+                { id: 'collocations', label: 'Collocations (5)' },
+                { id: 'set1', label: 'Core Verbs (5)' },
+                { id: 'set2', label: 'Business & Scale (5)' },
+                { id: 'set3', label: 'Risk & Action (5)' }
+            ],
+            graph: [
+                { id: 'all', label: 'All (31)' },
+                { id: 'trends', label: 'Trends (18)' },
+                { id: 'speed_degree', label: 'Speed & Degree (8)' },
+                { id: 'curve_actions', label: 'Curve Actions (5)' }
+            ]
+        };
+
         // App State
-        let currentLang = 'en'; // Default 'en', switchable to 'th' anytime
+        let currentDeck = 'core'; // 'core' or 'graph'
+        let currentLang = 'en';   // 'en' or 'th'
         let currentFilter = 'all';
-        let roundQueue = [...vocabData];
+        let roundQueue = [...coreVocabData];
         let currentIndex = 0;
         let isFlipped = false;
         let roundNumber = 1;
@@ -559,6 +1124,12 @@
         let isTransitioning = false;
 
         // DOM Elements
+        const deckCoreBtn = document.getElementById('deckCoreBtn');
+        const deckGraphBtn = document.getElementById('deckGraphBtn');
+        const deckCoreLabel = document.getElementById('deckCoreLabel');
+        const deckGraphLabel = document.getElementById('deckGraphLabel');
+        const filterContainer = document.getElementById('filterContainer');
+
         const langEnBtn = document.getElementById('langEnBtn');
         const langThBtn = document.getElementById('langThBtn');
         const headerSubtitle = document.getElementById('headerSubtitle');
@@ -578,6 +1149,11 @@
         const listViewTitle = document.getElementById('listViewTitle');
         const listViewSubtitle = document.getElementById('listViewSubtitle');
 
+        const frontTextContainer = document.getElementById('frontTextContainer');
+        const frontGraphContainer = document.getElementById('frontGraphContainer');
+        const cardGraphSvg = document.getElementById('cardGraphSvg');
+        const cardGraphCue = document.getElementById('cardGraphCue');
+
         const cardWrapper = document.getElementById('cardWrapper');
         const flashcardInner = document.getElementById('flashcardInner');
         const cardDefinition = document.getElementById('cardDefinition');
@@ -585,6 +1161,7 @@
         const cardCategoryTag = document.getElementById('cardCategoryTag');
         const cardWord = document.getElementById('cardWord');
         const cardPosBack = document.getElementById('cardPosBack');
+        const cardNoteBack = document.getElementById('cardNoteBack');
         
         const roundBadge = document.getElementById('roundBadge');
         const cardCounter = document.getElementById('cardCounter');
@@ -611,7 +1188,6 @@
         const correctBtn = document.getElementById('correctBtn');
         const shuffleBtn = document.getElementById('shuffleBtn');
         const speakBtn = document.getElementById('speakBtn');
-        const filterBtns = document.querySelectorAll('.filter-btn');
 
         const studyView = document.getElementById('studyView');
         const listView = document.getElementById('listView');
@@ -629,12 +1205,95 @@
             document.documentElement.classList.toggle('dark');
         });
 
+        function getActiveDataset() {
+            return currentDeck === 'core' ? coreVocabData : graphVocabData;
+        }
+
+        // Render Category Filter Pills for Current Deck
+        function renderFilterPills() {
+            const filters = deckFilters[currentDeck];
+            filterContainer.innerHTML = filters.map(f => {
+                const isActive = f.id === currentFilter;
+                const activeCls = 'bg-indigo-600 text-white shadow-sm';
+                const inactiveCls = 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400';
+                return `<button data-filter="${f.id}" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold transition whitespace-nowrap ${isActive ? activeCls : inactiveCls}">${f.label}</button>`;
+            }).join('');
+
+            filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentFilter = btn.dataset.filter;
+                    renderFilterPills();
+                    startFullDeck(currentFilter);
+                });
+            });
+        }
+
+        // Switch Between Core Vocab Deck & Graph Writing Deck
+        function switchDeck(deckName) {
+            if (currentDeck === deckName) return;
+            currentDeck = deckName;
+            currentFilter = 'all';
+
+            const activeTabClasses = ['bg-white', 'dark:bg-slate-800', 'text-indigo-600', 'dark:text-indigo-400', 'shadow-sm'];
+            const inactiveTabClasses = ['text-slate-600', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-slate-200'];
+
+            if (deckName === 'core') {
+                deckCoreBtn.classList.add(...activeTabClasses);
+                deckCoreBtn.classList.remove(...inactiveTabClasses);
+                deckGraphBtn.classList.remove(...activeTabClasses);
+                deckGraphBtn.classList.add(...inactiveTabClasses);
+            } else {
+                deckGraphBtn.classList.add(...activeTabClasses);
+                deckGraphBtn.classList.remove(...inactiveTabClasses);
+                deckCoreBtn.classList.remove(...activeTabClasses);
+                deckCoreBtn.classList.add(...inactiveTabClasses);
+            }
+
+            renderFilterPills();
+            updateStaticTexts();
+            startFullDeck('all');
+
+            if (!listView.classList.contains('hidden')) {
+                renderListView();
+            }
+        }
+
+        deckCoreBtn.addEventListener('click', () => switchDeck('core'));
+        deckGraphBtn.addEventListener('click', () => switchDeck('graph'));
+
+        // Update Static UI Labels based on Language & Active Deck
+        function updateStaticTexts() {
+            const t = uiStrings[currentLang];
+            deckCoreLabel.textContent = t.deckCoreLabel;
+            deckGraphLabel.textContent = t.deckGraphLabel;
+            headerSubtitle.textContent = currentDeck === 'core' ? t.headerSubtitleCore : t.headerSubtitleGraph;
+            frontBadgeLabel.textContent = currentDeck === 'core' ? t.frontBadgeCore : t.frontBadgeGraph;
+            frontFlipHint.innerHTML = `${t.frontFlipHint} <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
+            backBadgeLabel.textContent = t.backBadge;
+            backQuestionHint.textContent = t.backQuestionHint;
+            backFlipHint.textContent = currentDeck === 'core' ? t.backFlipHintCore : t.backFlipHintGraph;
+            wrongBtnLabel.textContent = t.wrongBtn;
+            correctBtnLabel.textContent = t.correctBtn;
+            prevBtnLabel.textContent = t.prevBtn;
+            flipBtn.textContent = t.flipBtn;
+            shuffleBtnLabel.textContent = t.shuffleBtn;
+            restartDeckBtnText.textContent = t.restartDeck;
+            summaryCorrectLabel.textContent = t.summaryCorrectLabel;
+            summaryWrongLabel.textContent = t.summaryWrongLabel;
+            shortcutsHint.innerHTML = t.shortcutsHtml;
+            listViewTitle.textContent = currentDeck === 'core' ? t.listViewTitleCore : t.listViewTitleGraph;
+            listViewSubtitle.textContent = currentDeck === 'core' ? t.listViewSubtitleCore : t.listViewSubtitleGraph;
+            backToStudyBtn.textContent = t.backToStudyBtn;
+
+            const isListHidden = listView.classList.contains('hidden');
+            toggleListBtn.querySelector('span').textContent = isListHidden ? t.allCardsBtn : t.flashcardsBtn;
+        }
+
         // Switch Language Function (EN <-> TH) without losing progress
         function setLanguage(lang) {
             currentLang = lang;
             document.documentElement.lang = lang;
 
-            // Update active pill styling
             const activeClasses = ['bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-indigo-300', 'shadow-sm'];
             const inactiveClasses = ['text-slate-500', 'dark:text-slate-400', 'hover:text-slate-800', 'dark:hover:text-slate-200'];
 
@@ -650,37 +1309,23 @@
                 langEnBtn.classList.add(...inactiveClasses);
             }
 
-            // Update static UI labels
-            const t = uiStrings[lang];
-            headerSubtitle.textContent = t.headerSubtitle;
-            frontBadgeLabel.textContent = t.frontBadge;
-            frontFlipHint.innerHTML = `${t.frontFlipHint} <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
-            backBadgeLabel.textContent = t.backBadge;
-            backQuestionHint.textContent = t.backQuestionHint;
-            backFlipHint.textContent = t.backFlipHint;
-            wrongBtnLabel.textContent = t.wrongBtn;
-            correctBtnLabel.textContent = t.correctBtn;
-            prevBtnLabel.textContent = t.prevBtn;
-            flipBtn.textContent = t.flipBtn;
-            shuffleBtnLabel.textContent = t.shuffleBtn;
-            restartDeckBtnText.textContent = t.restartDeck;
-            summaryCorrectLabel.textContent = t.summaryCorrectLabel;
-            summaryWrongLabel.textContent = t.summaryWrongLabel;
-            shortcutsHint.innerHTML = t.shortcutsHtml;
-            listViewTitle.textContent = t.listViewTitle;
-            listViewSubtitle.textContent = t.listViewSubtitle;
-            backToStudyBtn.textContent = t.backToStudyBtn;
+            updateStaticTexts();
 
-            const isListHidden = listView.classList.contains('hidden');
-            toggleListBtn.querySelector('span').textContent = isListHidden ? t.allCardsBtn : t.flashcardsBtn;
-
-            // Update current card definition without resetting flip state
+            // Update current card content without resetting flip state
             const card = roundQueue[currentIndex];
             if (card) {
-                cardDefinition.textContent = lang === 'en' ? card.defEn : card.defTh;
+                if (currentDeck === 'core') {
+                    cardDefinition.textContent = lang === 'en' ? card.defEn : card.defTh;
+                } else {
+                    cardGraphCue.textContent = lang === 'en' ? card.cueEn : card.cueTh;
+                    const noteText = lang === 'en' ? card.noteEn : card.noteTh;
+                    if (noteText) {
+                        cardNoteBack.textContent = noteText;
+                        cardNoteBack.classList.remove('hidden');
+                    }
+                }
             }
 
-            // Refresh summary or list view if currently visible
             if (!roundSummaryArea.classList.contains('hidden')) {
                 showRoundSummary();
             }
@@ -695,9 +1340,10 @@
         // Start a brand-new deck session based on selected category filter
         function startFullDeck(filter) {
             currentFilter = filter;
+            const dataset = getActiveDataset();
             const baseCards = filter === 'all' 
-                ? [...vocabData] 
-                : vocabData.filter(item => item.category === filter);
+                ? [...dataset] 
+                : dataset.filter(item => item.category === filter);
             
             roundNumber = 1;
             startRound(baseCards);
@@ -712,7 +1358,6 @@
             isFlipped = false;
             isTransitioning = false;
 
-            // Show active flashcard UI, hide summary screen
             activeCardArea.classList.remove('hidden');
             controlsArea.classList.remove('hidden');
             roundSummaryArea.classList.add('hidden');
@@ -730,11 +1375,37 @@
             const card = roundQueue[currentIndex];
             if (!card) return;
 
-            cardDefinition.textContent = currentLang === 'en' ? card.defEn : card.defTh;
             cardPosFront.textContent = `(${card.pos})`;
             cardCategoryTag.textContent = card.categoryLabel;
             cardWord.textContent = card.word;
             cardPosBack.textContent = `(${card.pos})`;
+
+            // Adjust font size for multi-line graph word lists
+            if (card.word.includes('\n') || card.word.length > 26) {
+                cardWord.className = "text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white drop-shadow-sm leading-snug whitespace-pre-line";
+            } else {
+                cardWord.className = "text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-sm leading-snug";
+            }
+
+            if (currentDeck === 'core') {
+                frontTextContainer.classList.remove('hidden');
+                frontGraphContainer.classList.add('hidden');
+                cardDefinition.textContent = currentLang === 'en' ? card.defEn : card.defTh;
+                cardNoteBack.classList.add('hidden');
+            } else {
+                frontTextContainer.classList.add('hidden');
+                frontGraphContainer.classList.remove('hidden');
+                cardGraphSvg.innerHTML = card.svg;
+                cardGraphCue.textContent = currentLang === 'en' ? card.cueEn : card.cueTh;
+
+                const noteText = currentLang === 'en' ? card.noteEn : card.noteTh;
+                if (noteText) {
+                    cardNoteBack.textContent = noteText;
+                    cardNoteBack.classList.remove('hidden');
+                } else {
+                    cardNoteBack.classList.add('hidden');
+                }
+            }
 
             // Force browser reflow before re-enabling flip transition
             void flashcardInner.offsetWidth;
@@ -774,14 +1445,12 @@
             summaryWrongCount.textContent = incorrectCards.length;
 
             if (incorrectCards.length === 0) {
-                // 100% Mastered!
                 summaryIconWrapper.className = "w-16 h-16 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center";
                 summaryIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
                 summaryTitle.textContent = t.masteredTitle;
                 summarySubtitle.textContent = t.masteredSub(total, roundNumber);
                 retryWrongBtn.classList.add('hidden');
             } else {
-                // Still have incorrect cards to loop through
                 summaryIconWrapper.className = "w-16 h-16 mx-auto rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center";
                 summaryIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
                 summaryTitle.textContent = t.roundCompleteTitle(roundNumber);
@@ -798,7 +1467,6 @@
 
             const currentCard = roundQueue[currentIndex];
 
-            // Ensure card isn't duplicated if user went back with Previous button
             correctCards = correctCards.filter(c => c.id !== currentCard.id);
             incorrectCards = incorrectCards.filter(c => c.id !== currentCard.id);
 
@@ -808,11 +1476,9 @@
                 incorrectCards.push(currentCard);
             }
 
-            // Update live counters immediately
             correctCounter.textContent = `Correct: ${correctCards.length}`;
             wrongCounter.textContent = `Incorrect: ${incorrectCards.length}`;
 
-            // Subtle visual fade transition to next card
             cardWrapper.classList.add('opacity-60', 'scale-[0.98]', 'transition-all', 'duration-150');
 
             setTimeout(() => {
@@ -828,7 +1494,7 @@
             }, 180);
         }
 
-        // Go Back to Previous Card (allows re-answering)
+        // Go Back to Previous Card
         function goToPreviousCard() {
             if (currentIndex > 0 && !isTransitioning) {
                 currentIndex--;
@@ -849,9 +1515,10 @@
             if (!card || !('speechSynthesis' in window)) return;
 
             window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(card.word);
+            const textToSpeak = card.speakText || card.word.replace(/\n/g, ', ');
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'en-US';
-            utterance.rate = 0.92;
+            utterance.rate = 0.9;
             window.speechSynthesis.speak(utterance);
         }
 
@@ -867,22 +1534,43 @@
             renderCard();
         }
 
-        // Render Complete List View
+        // Render Complete List View for Active Deck
         function renderListView() {
-            cardsGrid.innerHTML = vocabData.map((item, idx) => `
-                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between gap-3">
-                    <div>
-                        <div class="flex items-center justify-between gap-2 mb-1.5">
-                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
-                                #${idx + 1} &bull; ${item.categoryLabel}
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium">(${item.pos})</span>
+            const dataset = getActiveDataset();
+            if (currentDeck === 'core') {
+                cardsGrid.innerHTML = dataset.map((item, idx) => `
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between gap-3">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                                    #${idx + 1} &bull; ${item.categoryLabel}
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium">(${item.pos})</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">${item.word}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">${currentLang === 'en' ? item.defEn : item.defTh}</p>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">${item.word}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">${currentLang === 'en' ? item.defEn : item.defTh}</p>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            } else {
+                cardsGrid.innerHTML = dataset.map((item, idx) => `
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                        <div class="w-24 h-20 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700 p-1.5 flex items-center justify-center">
+                            ${item.svg}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2 mb-1">
+                                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                                    #${idx + 1} &bull; ${item.categoryLabel}
+                                </span>
+                                <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400">(${item.pos})</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white whitespace-pre-line leading-snug">${item.word}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${currentLang === 'en' ? item.noteEn : item.noteTh}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         // Event Listeners
@@ -905,20 +1593,6 @@
         // Restart Full Deck Button
         restartDeckBtn.addEventListener('click', () => {
             startFullDeck(currentFilter);
-        });
-
-        // Filter Buttons
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => {
-                    b.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm');
-                    b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
-                });
-                btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm');
-                btn.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-700');
-                
-                startFullDeck(btn.dataset.filter);
-            });
         });
 
         // Toggle Study vs List View
@@ -971,6 +1645,7 @@
         });
 
         // Initialize App
+        renderFilterPills();
         setLanguage('en');
         startFullDeck('all');
     </script>
